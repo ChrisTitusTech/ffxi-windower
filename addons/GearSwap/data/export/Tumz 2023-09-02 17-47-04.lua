@@ -1,0 +1,17 @@
+sets.exported={
+    main="Jolt Counter",
+    range="Animator P II",
+    ammo="Automat. Oil +3",
+    head="Tali'ah Turban +1",
+    body="Tali'ah Manteel +2",
+    hands={ name="Herculean Gloves", augments={'Accuracy+25','"Triple Atk."+3','Attack+14',}},
+    legs="Tali'ah Sera. +1",
+    feet="Tali'ah Crackows +1",
+    neck="Asperity Necklace",
+    waist="Moonbow Belt",
+    left_ear="Mache Earring",
+    right_ear="Brutal Earring",
+    left_ring="Epona's Ring",
+    right_ring="Chirich Ring",
+    back={ name="Visucius's Mantle", augments={'Pet: Acc.+20 Pet: R.Acc.+20 Pet: Atk.+20 Pet: R.Atk.+20','Accuracy+20 Attack+20','Pet: Accuracy+10 Pet: Rng. Acc.+10','Pet: "Regen"+10','Pet: Damage taken -5%',}},
+}

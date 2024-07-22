@@ -1,0 +1,56 @@
+<?xml version="1.1" ?>
+<settings>
+    <global>
+        <ShowFullID>true</ShowFullID>
+        <ShowHexID>true</ShowHexID>
+        <ShowSpeed>true</ShowSpeed>
+        <ShowTargetName>false</ShowTargetName>
+        <display>
+            <bg>
+                <alpha>102</alpha>
+                <blue>0</blue>
+                <green>0</green>
+                <red>0</red>
+                <visible>true</visible>
+            </bg>
+            <flags>
+                <bold>false</bold>
+                <bottom>false</bottom>
+                <draggable>true</draggable>
+                <italic>false</italic>
+                <right>false</right>
+            </flags>
+            <padding>0</padding>
+            <pos>
+                <x>0</x>
+                <y>0</y>
+            </pos>
+            <text>
+                <alpha>255</alpha>
+                <blue>255</blue>
+                <font>Consolas</font>
+                <fonts>
+
+                </fonts>
+                <green>255</green>
+                <red>255</red>
+                <size>12</size>
+                <stroke>
+                    <alpha>255</alpha>
+                    <blue>0</blue>
+                    <green>0</green>
+                    <red>0</red>
+                    <width>0</width>
+                </stroke>
+            </text>
+        </display>
+    </global>
+    <tumz>
+        <display>
+            <pos>
+                <x>1693</x>
+                <y>22</y>
+            </pos>
+        </display>
+    </tumz>
+</settings>

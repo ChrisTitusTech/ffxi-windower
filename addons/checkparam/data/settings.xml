@@ -1,0 +1,28 @@
+<?xml version="1.1" ?>
+<settings>
+    <global>
+        <BLM>magic attack bonus|magic burst damage|magic burst damage ii|int|magic accuracy|magic damage|fast cast|elemental magic casting time</BLM>
+        <BLU>physical damage taken|magic damage taken|haste|dual wield|store tp|double attack|triple attack|quadruple attack|critical hit rate|critical hit damage|weapon skill damage|fast cast|magic attack bonus|magic accuracy|cure potency</BLU>
+        <BRD>all songs|song effect duration|fast cast|song spellcasting time|singing skill|wind skill|string skill</BRD>
+        <BST>pet: double attack|pet: magic attack bonus|pet: damage taken</BST>
+        <COR>physical damage taken|magic damage taken|haste|dual wield|store tp|snapshot|rapid shot|fast cast|cure potency|magic accuracy|magic attack bonus|magic damage|weapon skill damage</COR>
+        <DNC>store tp|double attack|triple attack|quadruple attack</DNC>
+        <DRG>store tp|double attack|triple attack|quadruple attack|weapon skill damage</DRG>
+        <DRK>store tp|double attack|triple attack|quadruple attack|weapon skill damage</DRK>
+        <GEO>pet: regen|pet: damage taken|indicolure effect duration|fast cast|magic evasion|handbell skill|geomancy skill|geomancy</GEO>
+        <MNK>store tp|double attack|triple attack|quadruple attack|martial arts|subtle blow</MNK>
+        <NIN>store tp|double attack|triple attack|quadruple attack|subtle blow</NIN>
+        <PLD>enmity|damage taken|physical damage taken|magic damage taken|spell interruption rate|phalanx|cure potency|fastcast</PLD>
+        <PUP>pet: hp|pet: damage taken|pet: regen|martial arts|store tp|double attack|triple attack|quadruple attack</PUP>
+        <RDM>magic attack bonus|magic burst damage|magic burst damage ii|magic accuracy|fast cast|quick cast|enfeebling magic skill|enhancing magic skill|store tp|dual wield</RDM>
+        <RNG>store tp|snapshot|rapid shot|weapon skill damage</RNG>
+        <RUN>enmity|damage taken|physical damage taken|magic damage taken|spell interruption rate|phalanx|inquartata|fastcast</RUN>
+        <SAM>store tp|double attack|triple attack|quadruple attack|weapon skill damage</SAM>
+        <SCH>magic attack bonus|magic burst damage|magic burst damage ii|magic accuracy|magic damage|fast cast|elemental magic casting time|cure potency|enh mag eff dur|enhancing magic effect duration</SCH>
+        <SMN>physical damage taken|magic damage taken|pet: physical damage taken|pet: magic damage taken|blood pact delay|blood pact delay ii|blood pact damage|avatar perpetuation cost|pet: magic attack bonus|pet: attack|pet: double attack|pet: accuracy|pet: magic accuracy|summoning magic skill|pet: blood pact damage|pet: magic damage</SMN>
+        <THF>store tp|double attack|triple attack|quadruple attack|dual wield|critical hit rate|critical hit damage|haste|weapon skill damage|steal|sneak attack|trick attack</THF>
+        <WAR>store tp|double attack|triple attack|quadruple attack|weapon skill damage</WAR>
+        <WHM>cure potency|cure potency ii|fast cast|quick cast|cure spellcasting time|enmity|healing magic casting time|divine benison|damage taken|physical damage taken|magic damage taken</WHM>
+        <levelfilter>99</levelfilter>
+    </global>
+</settings>

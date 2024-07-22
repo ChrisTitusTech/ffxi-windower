@@ -1,0 +1,4 @@
+//EXP Profile
+//Passes everything except for Kindred & Beastmen Seals
+
+if item is not 1126,1127 then pass

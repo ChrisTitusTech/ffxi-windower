@@ -1,0 +1,9 @@
+<?xml version="1.1" ?>
+<settings>
+    <global>
+        <alpha>255</alpha>
+        <mode>blacklist</mode>
+        <size>10</size>
+        <x_pos>290</x_pos>
+    </global>
+</settings>

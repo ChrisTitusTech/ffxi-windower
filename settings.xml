@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<settings>
+  <autoload>
+    <addon>aecho</addon>
+    <addon>autocontrol</addon>
+    <addon>autoenterkey</addon>
+    <addon>battlemod</addon>
+    <addon>cancel</addon>
+    <addon>capetrader</addon>
+    <addon>checkparam</addon>
+    <addon>craft</addon>
+    <addon>Debuffed</addon>
+    <addon>DistancePlus</addon>
+    <addon>DressUp</addon>
+    <addon>dynamishelper</addon>
+    <addon>equipviewer</addon>
+    <addon>findAll</addon>
+    <addon>GearSwap</addon>
+    <addon>highlight</addon>
+    <addon>InfoBar</addon>
+    <addon>linker</addon>
+    <addon>ohShi</addon>
+    <addon>Omen</addon>
+    <addon>plasmon</addon>
+    <addon>rolltracker</addon>
+    <addon>scoreboard</addon>
+    <addon>shortcuts</addon>
+    <addon>Silence</addon>
+    <addon>targetinfo</addon>
+    <addon>timestamp</addon>
+    <addon>TParty</addon>
+    <addon>xivbar</addon>
+    <plugin>DelayMeNot</plugin>
+    <plugin>ChatMon</plugin>
+    <plugin>FFXIDB</plugin>
+    <plugin>LightLuggage</plugin>
+    <plugin>MipmapFix</plugin>
+    <plugin>Timers</plugin>
+    <plugin>InfoBar</plugin>
+    <plugin>Config</plugin>
+  </autoload>
+  <profile name="">
+    <consolekey>Insert</consolekey>
+    <uiscale>1.2</uiscale>
+    <supersampling>2</supersampling>
+  </profile>
+</settings>

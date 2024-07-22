@@ -1,0 +1,62 @@
+keyboard_allowmmf 1
+
+console_position 15 50
+console_color 255 255 0 0
+console_displayactivity 1
+console_fadedelay 3500
+console_screendir screenshots
+
+//Set game variables
+game_forceambientlight 0
+game_ambientlight 255 75 75 75
+game_gamma 50
+game_allowsetcursorpos 0
+game_exittype 1
+game_exitprompt 1
+game_allowresize 0
+
+drawdistance set 10
+//Bind keys
+//Bind syntax is "bind <key> <up> <command>
+// ^ represents control- and ! is alt, eg !1 is alt-1
+bind !f10 drawdistance set 10
+bind ^f10 drawdistance set 1
+bind %end game_forceambientlight
+bind sysrq screenshot png hide
+bind ^v paste
+echo Toggle Lighting = End (Bump mapping must be off to work properly)
+echo Toggle FPS = F12
+echo DrawDistance Lv 10: Alt-F10
+echo DrawDistance Lv 1: Ctrl-F10
+echo Paste Clipboard = Ctrl-V
+
+// *** ALLIANCE TARGET KEYS ***
+// This lets you push Alt+F1-6 and Ctrl+F1-6 to  to target Alliance members.
+bind ^f1 input /ta <a10>
+bind ^f2 input /ta <a11>
+bind ^f3 input /ta <a12>
+bind ^f4 input /ta <a13>
+bind ^f5 input /ta <a14>
+bind ^f6 input /ta <a15>
+bind !f1 input /ta <a20>
+bind !f2 input /ta <a21>
+bind !f3 input /ta <a22>
+bind !f4 input /ta <a23>
+bind !f5 input /ta <a24>
+bind !f6 input /ta <a25>
+
+// The below line is to enable DressUp BlinkMeNot Functionality.  Remove the // from the line below if you use DressUp.
+du blinking all all on
+
+lua load PartyBuffs
+lua load skillchains
+lua load XIPivot
+
+Pivot a NextHD
+
+// WAIT 30 seconds and Character load before loading this part
+wait 30
+
+lua load GearInfo
+lua load AutoSkillchain
+config FrameRateDivisor 1

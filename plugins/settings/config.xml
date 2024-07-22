@@ -1,0 +1,24 @@
+<settings>
+    <global>
+        <!--If set to true will automatically determine the correct aspect ratio-->
+        <AdjustAspectRatio>true</AdjustAspectRatio>
+        <!--Explicitly define the aspect ratio (x:y resolution), will be ignored if "AdjustAspectRatio" is enabled-->
+        <AspectRatio>1.33333</AspectRatio>
+        <!--If set to true will automatically lock onto a target after engaging-->
+        <BattleAutoTarget>true</BattleAutoTarget>
+        <!--The maximum map draw distance, 1 being the game's maximum setting-->
+        <ClippingPlane>5</ClippingPlane>
+        <!--Only integer values, 3 being the lowest and 0 the highest-->
+        <AnimationFrameRate>0</AnimationFrameRate>
+        <!--If set to true will enable footstep effects (both display and sound)-->
+        <FootstepEffects>true</FootstepEffects>
+        <!--Time in minutes of inactivity until a disconnect, 0 to disable-->
+        <AutoDisconnectTime>0</AutoDisconnectTime>
+        <!--2 for 30 FPS, 1 for 60 FPS, 0 for uncapped frame rates-->
+        <FrameRateDivisor>2</FrameRateDivisor>
+    </global>
+    <Tumz>
+        <!--2 for 30 FPS, 1 for 60 FPS, 0 for uncapped frame rates-->
+        <FrameRateDivisor>1</FrameRateDivisor>
+    </Tumz>
+</settings>

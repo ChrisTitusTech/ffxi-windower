@@ -1,0 +1,116 @@
+<?xml version="1.1" ?>
+<settings>
+    <global>
+        <AutoActivate>true</AutoActivate>
+        <AutoDeusExAutomata>false</AutoDeusExAutomata>
+        <autosets>
+            <default>
+
+            </default>
+            <healer>
+                <frame>Stormwaker Frame</frame>
+                <head>Soulsoother Head</head>
+                <slot01>Disruptor</slot01>
+                <slot02>Economizer</slot02>
+                <slot03>Mana Conserver</slot03>
+                <slot04>Vivi-Valve</slot04>
+                <slot05>Percolator</slot05>
+                <slot06>Damage Gauge</slot06>
+                <slot07>Eraser</slot07>
+                <slot08>Optic Fiber</slot08>
+                <slot09>Steam Jacket</slot09>
+                <slot10>Condenser</slot10>
+                <slot11>Mana Channeler</slot11>
+                <slot12>Stealth Screen</slot12>
+            </healer>
+            <main>
+                <frame>sharpshot frame</frame>
+                <head>valoredge head</head>
+                <slot01>inhibitor</slot01>
+                <slot02>inhibitor ii</slot02>
+                <slot03>magniplug</slot03>
+                <slot04>magniplug ii</slot04>
+                <slot05>turbo charger</slot05>
+                <slot06>turbo charger ii</slot06>
+                <slot07>attuner</slot07>
+                <slot08>speedloader ii</slot08>
+                <slot09>truesights</slot09>
+                <slot10>coiler ii</slot10>
+                <slot11>optic fiber</slot11>
+                <slot12>optic fiber ii</slot12>
+            </main>
+            <melrng>
+                <frame>Sharpshot Frame</frame>
+                <head>Valoredge Head</head>
+                <slot01>Tension Spring</slot01>
+                <slot02>Turbo Charger</slot02>
+                <slot03>Equalizer</slot03>
+                <slot04>Dynamo</slot04>
+                <slot05>Tension Spring II</slot05>
+                <slot06>Scope</slot06>
+                <slot07>Auto-Repair Kit II</slot07>
+                <slot08>Coiler</slot08>
+                <slot09>Tactical Processor</slot09>
+                <slot10>Armor Plate II</slot10>
+                <slot11>Optic Fiber</slot11>
+                <slot12>Volt Gun</slot12>
+            </melrng>
+            <tank>
+                <frame>sharpshot frame</frame>
+                <head>soulsoother head</head>
+                <slot01>strobe ii</slot01>
+                <slot02>inhibitor ii</slot02>
+                <slot03>strobe</slot03>
+                <slot04>tension spring ii</slot04>
+                <slot05>turbo charger</slot05>
+                <slot06>turbo charger ii</slot06>
+                <slot07>flashbulb</slot07>
+                <slot08>mana jammer iv</slot08>
+                <slot09>armor plate iv</slot09>
+                <slot10>auto-repair kit iv</slot10>
+                <slot11>optic fiber</slot11>
+                <slot12>optic fiber ii</slot12>
+            </tank>
+        </autosets>
+        <bg>
+            <alpha>255</alpha>
+            <blue>0</blue>
+            <green>0</green>
+            <red>0</red>
+            <visible>true</visible>
+        </bg>
+        <burdentracker>true</burdentracker>
+        <flags>
+            <bold>false</bold>
+            <bottom>false</bottom>
+            <draggable>true</draggable>
+            <italic>false</italic>
+            <right>false</right>
+        </flags>
+        <maneuvertimers>true</maneuvertimers>
+        <padding>0</padding>
+        <pos>
+            <x>1600</x>
+            <y>920</y>
+        </pos>
+        <text>
+            <alpha>255</alpha>
+            <blue>255</blue>
+            <font>Consolas</font>
+            <fonts>
+
+            </fonts>
+            <green>255</green>
+            <red>255</red>
+            <size>10</size>
+            <stroke>
+                <alpha>255</alpha>
+                <blue>0</blue>
+                <green>0</green>
+                <red>0</red>
+                <width>0</width>
+            </stroke>
+        </text>
+        <visible>false</visible>
+    </global>
+</settings>

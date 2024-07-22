@@ -1,0 +1,17 @@
+sets.exported={
+    main={ name="Gae Derg +1", augments={'Path: A',}},
+    sub="Eletta Grip",
+    ammo="Staunch Tathlum",
+    head="Sulevia's Mask +2",
+    body="Sulevia's Plate. +2",
+    hands="Sulev. Gauntlets +2",
+    legs="Sulev. Cuisses +2",
+    feet="Flam. Gambieras +2",
+    neck="Sanctity Necklace",
+    waist="Ioskeha Belt",
+    left_ear="Cessance Earring",
+    right_ear={ name="Odnowa Earring +1", augments={'Path: A',}},
+    left_ring="Vocane Ring",
+    right_ring="Moonbeam Ring",
+    back={ name="Brigantia's Mantle", augments={'STR+20','Accuracy+20 Attack+20','"Dbl.Atk."+10','Damage taken-5%',}},
+}

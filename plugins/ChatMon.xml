@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<ChatMon>
+	<settings
+		DisableOnFocus="false"
+		TellSound="Tell"
+		ExamineSound="Examine"
+		EmoteSound="Emote"
+		TalkSound="Talk"
+		InviteSound="Invite"
+		SoundInterval="5"
+		DisableFilters="false"
+	/>
+	<!-- Add Triggers below. The line below is a comment for an example -->
+	<!-- Valid From entries: Say, Shout, Party, Linkshell, Tell, Invite, Emote, Examine, All -->
+	<!-- match should not be used for Emote. Examine matches to Examiners name, Invite matches to Inviters name. -->
+	<!-- <trigger match="*YourNickNameHere*" notmatch="*SomecommonMatch*" notfrom="Tell" from="Party|Linkshell" sound="Talk" /> -->
+</ChatMon>

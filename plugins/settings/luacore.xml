@@ -1,0 +1,8 @@
+<settings>
+    <global>
+        <!--If set to true will display the error message on a new line.-->
+        <ErrorNewLine>false</ErrorNewLine>
+        <!--If set to true will display a shortened file path.-->
+        <CondenseError>true</CondenseError>
+    </global>
+</settings>

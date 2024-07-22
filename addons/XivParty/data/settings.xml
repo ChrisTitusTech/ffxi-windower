@@ -1,0 +1,53 @@
+<?xml version="1.1" ?>
+<settings>
+    <global>
+        <alliance1>
+            <alignBottom>false</alignBottom>
+            <itemSpacing>0</itemSpacing>
+            <pos>0.8671875,0.5277777</pos>
+            <scale>0,0</scale>
+            <showEmptyRows>false</showEmptyRows>
+        </alliance1>
+        <alliance2>
+            <alignBottom>false</alignBottom>
+            <itemSpacing>0</itemSpacing>
+            <pos>0.8671875,0.5972222</pos>
+            <scale>0,0</scale>
+            <showEmptyRows>false</showEmptyRows>
+        </alliance2>
+        <buffs>
+            <customOrder>true</customOrder>
+            <filterMode>blacklist</filterMode>
+            <filters />
+        </buffs>
+        <hideAlliance>false</hideAlliance>
+        <hideCutscene>true</hideCutscene>
+        <hideKeyCode>207</hideKeyCode>
+        <hideSolo>false</hideSolo>
+        <layout>xiv</layout>
+        <mouseTargeting>true</mouseTargeting>
+        <party>
+            <alignBottom>false</alignBottom>
+            <itemSpacing>0</itemSpacing>
+            <pos>0.015625,0.4791666</pos>
+            <scale>0,0</scale>
+            <showEmptyRows>false</showEmptyRows>
+        </party>
+        <rangeIndicator>0</rangeIndicator>
+        <rangeIndicatorFar>0</rangeIndicatorFar>
+        <rangeNumeric>false</rangeNumeric>
+        <swapSingleAlliance>false</swapSingleAlliance>
+        <updateIntervalMsec>30</updateIntervalMsec>
+    </global>
+    <tumz>
+        <alliance1>
+            <scale>0.83,0.83</scale>
+        </alliance1>
+        <alliance2>
+            <scale>0.83,0.83</scale>
+        </alliance2>
+        <party>
+            <scale>0.83,0.83</scale>
+        </party>
+    </tumz>
+</settings>

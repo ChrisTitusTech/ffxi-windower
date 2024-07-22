@@ -1,0 +1,8 @@
+//Example Profile
+//Provides syntax examples, not intended for actual use
+
+if item is 1126 then lot //Lots 1126 (Beastmen's seal)
+if item is 10,10,220 then pass //Lots 10, 10, and 220
+if item is 10 then lot //This will never happen
+if item is not 1 then pass //Passes everything besides 1 and 1126
+if item is 2 then lot //This will never happen

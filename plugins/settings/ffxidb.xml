@@ -1,0 +1,18 @@
+<settings>
+    <global>
+        <X>0</X>
+        <Y>0</Y>
+        <Opacity>75</Opacity>
+        <ShowPC>true</ShowPC>
+        <ShowNPC>true</ShowNPC>
+        <ShowMob>true</ShowMob>
+        <ShowMarker>true</ShowMarker>
+        <ShowTargetLine>true</ShowTargetLine>
+        <Ranges />
+        <Scale>1</Scale>
+    </global>
+    <Tumz>
+        <X>1655</X>
+        <Y>942</Y>
+    </Tumz>
+</settings>

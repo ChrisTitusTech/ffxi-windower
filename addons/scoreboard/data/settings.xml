@@ -64,4 +64,12 @@
         <showfellow>true</showfellow>
         <visible>false</visible>
     </global>
+    <tumz>
+        <display>
+            <pos>
+                <x>1290</x>
+                <y>0</y>
+            </pos>
+        </display>
+    </tumz>
 </settings>

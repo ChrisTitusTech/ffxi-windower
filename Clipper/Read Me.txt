@@ -1,0 +1,71 @@
+----------------------------------------------------------------------------------------------------
+                    _________  .__   .__                                 
+                    \_   ___ \ |  |  |__|______  ______    ____  _______ 
+                    /    \  \/ |  |  |  |\____ \ \____ \ _/ __ \ \_  __ \
+                    \     \____|  |__|  ||  |_> >|  |_> >\  ___/  |  | \/
+                     \______  /|____/|__||   __/ |   __/  \___  > |__|   
+                            \/           |__|    |__|         \/         
+
+----------------------------------------------------------------------------------------------------
+                            Clipper (c) 2005-2013 atom0s [aka Wiccaan]
+----------------------------------------------------------------------------------------------------
+
+..:: What Is Clipper? ::..
+
+        Clipper is a known / popular third-party tool for the popular MMORPG, Final Fantasy XI. Clipper
+        allows players the ability to adjust their character in ways not normally meant while playing.
+        
+        This includes, but not limited to:
+            •Player Status (Always on chocobo, maintenance mode (clipping)). 
+            •GM Flag (Allows removal of collision detection.) 
+            •JAWait0 (Removes model locking when performing actions.) 
+            •Speed Hacking (Allows advanced movement beyond normal means.) 
+            •Position Adjustments (Forces players to move a direction regardless of terrain.) 
+            •Locking Z Coord (Allows players to walk in air, "floating".) 
+            •Auto-disabling features to help prevent being detected/caught using all the tools. 
+
+
+..:: Clipper Histroy ::..
+
+        Maintenance mode (aka originally known as Clipper) was found and released in 2004/2005 by Wiccaan. 
+        After several updates the original Clipper tool broke and was revived by other players. Recently, 
+        Clipper has turned into another popular tool called 'Cupper'. 
+
+        Since then Wiccaan has revived the original Clipper project to create a more self-sufficient tool to 
+        remove the need for recompiling the base project. Instead, this new Clipper is based entirely on using 
+        a configuration file to remove the need to edit the source when updates to the game happen. (However, 
+        some changes may be required depending on the amount of changes made to the game.) 
+        
+        Clipper was originally found, by accident, while Wiccaan was updating Wardrobe. Another popular 
+        third-party application for Final Fantasy XI.
+
+
+..:: Latest Version ::..
+
+        You can find the latest version of this application here:
+        https://code.google.com/p/ffxiclipper/downloads/list
+    
+    
+..:: Contacting Me; Reporting Bugs; Suggestions; Feedback; Etc. ::..
+
+        To report a bug, suggest a feature, make an issue here:
+        https://code.google.com/p/ffxiclipper/issues/list
+        
+        For source code access, see here:
+        https://code.google.com/p/ffxiclipper/source/checkout
+        
+        Need to contact me directly? Send an email to:
+        ffxiclipper@gmail.com
+    
+    
+..:: Legal ::..
+
+        FINAL FANTASY is a registered trademark of Square Enix Co., Ltd.. © 2002-2013 SQUARE ENIX CO., LTD.
+
+        I do not take any credit for images used in this project. All rights to their respective owners.
+
+        I am not responsible for what happens while using this tool, or any code included in this project. 
+        You agree that by using this tool, its code, or anything associated with this project, that you are 
+        entirely that you take full responsibility for anything you do with it.
+
+        USE AT YOUR OWN RISK! THIS TOOL CAN GET YOU BANNED! YOU HAVE BEEN WARNED!

@@ -1,0 +1,17 @@
+sets.exported={
+    main="Epeolatry",
+    sub="Eletta Grip",
+    ammo="Staunch Tathlum",
+    head="Aya. Zucchetto +2",
+    body="Ayanmo Corazza +2",
+    hands="Turms Mittens",
+    legs="Meg. Chausses +2",
+    feet={ name="Herculean Boots", augments={'Accuracy+20','"Triple Atk."+3','AGI+8','Attack+10',}},
+    neck={ name="Futhark Torque", augments={'Path: A',}},
+    waist="Ioskeha Belt",
+    left_ear={ name="Odnowa Earring +1", augments={'Path: A',}},
+    right_ear="Cessance Earring",
+    left_ring="Moonbeam Ring",
+    right_ring="Chirich Ring",
+    back={ name="Ogma's Cape", augments={'HP+60','Eva.+20 /Mag. Eva.+20','Mag. Evasion+10','"Store TP"+10','Parrying rate+5%',}},
+}

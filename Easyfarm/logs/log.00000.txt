@@ -1,0 +1,10 @@
+2024-07-22 17:24:16.3904 EasyFarm.Logging.NLogTextFileLogger EasyFarm Started ...
+2024-07-22 22:36:01.1037 EasyFarm.Logging.NLogTextFileLogger FSM thread interrupted
+System.Threading.ThreadInterruptedException: Thread was interrupted from a waiting state.
+   at System.Threading.Thread.SleepInternal(Int32 millisecondsTimeout)
+   at System.Threading.Thread.Sleep(Int32 millisecondsTimeout)
+   at EasyFarm.Classes.Executor.EnsureCast(String command) in C:\projects\easyfarm\EasyFarm\Classes\Executor.cs:line 150
+   at EasyFarm.Classes.Executor.UseBuffingActions(IEnumerable`1 actions) in C:\projects\easyfarm\EasyFarm\Classes\Executor.cs:line 74
+   at EasyFarm.States.StartState.Run() in C:\projects\easyfarm\EasyFarm\States\StartState.cs:line 57
+   at EasyFarm.States.FiniteStateMachine.RunStateMachine() in C:\projects\easyfarm\EasyFarm\States\FiniteStateMachine.cs:line 171
+   at EasyFarm.States.FiniteStateMachine.<RunFiniteStateMainWithThread>b__9_0() in C:\projects\easyfarm\EasyFarm\States\FiniteStateMachine.cs:line 99

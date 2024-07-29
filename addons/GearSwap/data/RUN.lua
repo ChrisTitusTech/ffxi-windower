@@ -145,17 +145,17 @@ function init_gear_sets()
         main="Epeolatry",
         sub="Eletta Grip",
         ammo="Staunch Tathlum",
-        head={ name="Adhemar Bonnet", augments={'DEX+10','AGI+10','Accuracy+15',}},
-        body="Turms Harness",
+        head="Aya. Zucchetto +2",
+        body="Ayanmo Corazza +2",
         hands="Turms Mittens",
         legs={ name="Samnuha Tights", augments={'STR+9','DEX+8','"Dbl.Atk."+2','"Triple Atk."+2',}},
         feet={ name="Herculean Boots", augments={'Accuracy+20','"Triple Atk."+3','AGI+8','Attack+10',}},
         neck={ name="Futhark Torque", augments={'Path: A',}},
-        waist="Windbuffet Belt",
+        waist="Ioskeha Belt",
         left_ear={ name="Odnowa Earring +1", augments={'Path: A',}},
         right_ear="Cessance Earring",
         left_ring="Moonbeam Ring",
-        right_ring="Chirich Ring",
+        right_ring="Moonbeam Ring",
         back={ name="Ogma's Cape", augments={'HP+60','Eva.+20 /Mag. Eva.+20','Mag. Evasion+10','"Store TP"+10','Parrying rate+5%',}},
     }
 
@@ -191,17 +191,12 @@ function init_gear_sets()
     -- Weaponskill sets --
     sets.precast.WS = {
         ammo="Hagneia Stone",
-        head="Sukeroku Hachi.",
-        body="Ayanmo Corazza +2",
-        hands={ name="Herculean Gloves", augments={'Accuracy+25','"Triple Atk."+3','Attack+14',}},
         legs={ name="Samnuha Tights", augments={'STR+9','DEX+8','"Dbl.Atk."+2','"Triple Atk."+2',}},
-        feet={ name="Herculean Boots", augments={'Accuracy+20','"Triple Atk."+3','AGI+8','Attack+10',}},
         neck="Asperity Necklace",
         waist="Ioskeha Belt",
         left_ear="Brutal Earring",
         right_ear="Cessance Earring",
-        left_ring="Chirich Ring",
-        right_ring="Epona's Ring",
+        right_ring="Chirich Ring",
         back={ name="Ogma's Cape", augments={'HP+60','Eva.+20 /Mag. Eva.+20','Mag. Evasion+10','"Store TP"+10','Parrying rate+5%',}},
     }
 

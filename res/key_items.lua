@@ -564,7 +564,7 @@ return {
     [562] = {id=562,en="Moglification: Experience Boost",ja="モーグリの応援：経験値アップ",category="Active Effects"},
     [563] = {id=563,en="Moglification: Capacity Boost",ja="モーグリの応援：キャパシティポイントアップ",category="Active Effects"},
     [564] = {id=564,en="Moglification: Synergy Skill Gains",ja="モーグリの応援：錬成スキル上昇率アップ",category="Active Effects"},
-    [565] = {id=565,en="Moglification: Synergy Furnace Duration",ja="モーグリの応援：錬成窯稼働時間アップ",category="Active Effects"},
+    [565] = {id=565,en="Moglification: Furnace Duration",ja="モーグリの応援：錬成窯稼働時間アップ",category="Active Effects"},
     [566] = {id=566,en="Moglification: Resist Death",ja="モーグリの応援：デス耐性",category="Active Effects"},
     [567] = {id=567,en="Moglification: A.M.A.N. Trove",ja="モーグリの応援：A.M.A.N. トローブ",category="Active Effects"},
     [576] = {id=576,en="Ballista License",ja="バリスタライセンス",category="Permanent Key Items"},
@@ -3201,10 +3201,16 @@ return {
     [3350] = {id=3350,en="sheet of Near East tunes",ja="オーケストリオン譜：近東",category="Permanent Key Items"},
     [3351] = {id=3351,en="Mog Kupon A-AEV",ja="クーポンA-AEV",category="Temporary Key Items"},
     [3352] = {id=3352,en="Mog Kupon A-AHM",ja="クーポンA-AHM",category="Temporary Key Items"},
+    [3353] = {id=3353,en="Mog Kupon A-ATT",ja="クーポンA-ATT",category="Temporary Key Items"},
+    [3354] = {id=3354,en="Mog Kupon A-AMR",ja="クーポンA-AMR",category="Temporary Key Items"},
+    [3355] = {id=3355,en="Mog Kupon A-AGK",ja="クーポンA-AGK",category="Temporary Key Items"},
+    [3356] = {id=3356,en="Orb of Radiance phantom gem",ja="ファントムクォーツ【勾玉】",category="Temporary Key Items"},
+    [3357] = {id=3357,en="Ra'Kaznar plate fragment",ja="カザナルプレートの欠片",category="Temporary Key Items"},
+    [3360] = {id=3360,en="sheet of divine tunes",ja="オーケストリオン譜：神威",category="Permanent Key Items"},
 }, {"id", "en", "ja", "category"}
 
 --[[
-Copyright © 2013-2024, Windower
+Copyright © 2013-2025, Windower
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:

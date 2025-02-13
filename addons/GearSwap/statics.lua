@@ -131,7 +131,7 @@ addendum_black = {[253]="Sleep",[259]="Sleep II",[260]="Dispel",[162]="Stone IV"
     [168]="Thunder V",[157]="Aero IV",[158]="Aero V",[152]="Blizzard IV",[153]="Blizzard V",[147]="Fire IV",[148]="Fire V",
     [172]="Water IV",[173]="Water V",[255]="Break"}
 
-resources_ranged_attack = {id="0",index="0",prefix="/range",english="Ranged",german="Fernwaffe",french="Attaque à dist.",japanese="飛び道具",type="Misc",element="None",targets=S{"Enemy"}}
+resources_ranged_attack = {id="0",index="0",prefix="/range",range=25,english="Ranged",german="Fernwaffe",french="Attaque à dist.",japanese="飛び道具",type="Misc",element="None",targets=S{"Enemy"}}
 
 
 -- _globals --
@@ -177,7 +177,7 @@ slot_map.back = 15
 
 
 
-gearswap_disabled = false
+gearswap_disabled = true
 seen_0x063_type9 = false
 delay_0x063_v9 = false
 vana_offset = 572662306+1009810800

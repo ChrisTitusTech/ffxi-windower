@@ -10,11 +10,9 @@
 
 wait 5;
 load LuaCore;
-load ChatMon;
 load Config;
 load DelayMeNot;
 load FFXIDB;
-load InfoBar;
 load LightLuggage;
 load MipmapFix;
 load Timers;

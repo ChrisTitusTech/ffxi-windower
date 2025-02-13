@@ -622,7 +622,9 @@ augment_values = {
         [0x484] = {{stat="Magic dmg. taken", offset=1,multiplier=-2,percent=true}},
         [0x485] = {{stat="Spell interruption rate down", offset=1,multiplier=-2,percent=true}},
         [0x486] = {{stat="Occ. inc. resist. to stat. ailments", offset=1,multiplier=2}},
-        
+
+	[0x4DE] = {{stat="Pet: Phys. dmg. taken", offset=1,multiplier=-2,percent=true}},
+	[0x4DF] = {{stat="Pet: Magic dmg. taken", offset=1,multiplier=-2,percent=true}},
         [0x4E0] = {{stat="Enh. Mag. eff. dur. ", offset=1}},
         [0x4E1] = {{stat="Helix eff. dur. ", offset=1}},
         [0x4E2] = {{stat="Indi. eff. dur. ", offset=1}},
@@ -1753,6 +1755,7 @@ function decode.Augmented(str)
         rettab.augment_system = 4
         local path_map = {[0] = 'A',[1] = 'B', [2] = 'C', [3] = 'D'}
         rettab.path = path_map[math.floor(str:byte(5)%4)]
+        rettab.rank = math.floor(str:byte(7)%128 / 4)
         rettab.augments = {'Path: ' ..rettab.path}
     elseif flag_2/128 >= 1 then -- Evolith
         rettab.augment_system = 3

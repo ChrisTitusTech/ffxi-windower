@@ -10,6 +10,11 @@
         <ShowTargetLine>true</ShowTargetLine>
         <Ranges />
         <Scale>1</Scale>
+        <ColorPC>#FF006FB8</ColorPC>
+        <ColorNPC>#FF269D49</ColorNPC>
+        <ColorMob>#FFED1A20</ColorMob>
+        <ColorMarker>#FFB646AD</ColorMarker>
+        <ZoomDefault>-10</ZoomDefault>
     </global>
     <Tumz>
         <X>1655</X>

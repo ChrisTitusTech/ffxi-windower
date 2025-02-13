@@ -518,10 +518,7 @@ parse.i[0x063] = function (data)
                     end
                     local buff_name = res.buffs[new.id][language]
                     windower.debug('refresh buff '..buff_name..' ('..tostring(new.id)..')')
-                    if not gearswap_disabled then
-                        refresh_globals()
-                        equip_sets('buff_refresh',nil,buff_name,new)
-                    end
+                    batch:append({name=buff_name,refresh=true,tab=new})                    
                 else
                     -- Not matched, so it's assumed the buff is new
                     if not res.buffs[new.id] then
@@ -556,7 +553,11 @@ parse.i[0x063] = function (data)
             if not gearswap_disabled and #batch > 0 then
                 refresh_globals()
                 for v,_ in batch:it() do
-                    equip_sets('buff_change',nil,v.name,v.gain,v.tab)
+                    if v.refresh then
+                        equip_sets('buff_refresh',nil,v.name,v.tab)
+                    else
+                        equip_sets('buff_change',nil,v.name,v.gain,v.tab)
+                    end
                 end
             end
         end
@@ -757,16 +758,22 @@ parse.o[0x100] = function(data)
     end
 end
 
+
+
 function initialize_packet_parsing()
-    for i,v in pairs(parse.i) do
+    local lastpackets = L{}
+    
+    for i,_ in pairs(parse.i) do
         if i ~= 0x028 then
-            local lastpacket = windower.packets.last_incoming(i)
-            if lastpacket then
-                v(lastpacket)
-            end
-            if i == 0x63 and lastpacket and lastpacket:byte(5) ~= 9 then
-                -- Not receiving an accurate buff line on load because the wrong 0x063 packet was sent last
+            local data, ts = windower.packets.last_incoming(i)
+            if data then
+                lastpackets:append({ id = i, ts = ts, data = data })
             end
         end
+    end
+    
+    table.sort(lastpackets, function(t1, t2) return t1.ts < t2.ts end)
+    for _,p in ipairs(lastpackets) do
+        parse.i[p.id](p.data)
     end
 end

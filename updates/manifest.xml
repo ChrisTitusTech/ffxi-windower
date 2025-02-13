@@ -1,197 +1,106 @@
 <update>
   <launcher>
-    <version>4.3.7757.25903</version>
+    <version>4.6.1.2</version>
   </launcher>
   <hook>
-    <version>4.3.7.0</version>
+    <version>4.6.0.3</version>
   </hook>
   <plugins>
     <plugin>
+      <name>Bidder</name>
+      <version>1.4.1.14</version>
+      <hidden>true</hidden>
+      <description>Open auction and delivery box menus anywhere.</description>
+    </plugin>
+    <plugin>
+      <name>Binder</name>
+      <version>1.7.0.6</version>
+      <description>Bind to the macro keys on your gaming keyboard or mouse.</description>
+    </plugin>
+    <plugin>
+      <name>Config</name>
+      <version>2.0.1.8</version>
+      <description>Adds several configuration options that are automatically applied to characters during play.</description>
+    </plugin>
+    <plugin>
+      <name>DelayMeNot</name>
+      <version>1.0.0.7</version>
+      <description>Removes the default delay for the macro bar with keyboard controls.</description>
+    </plugin>
+    <plugin>
+      <name>FFXIDB</name>
+      <version>1.2.3.5</version>
+      <description>Displays an in-game minimap.</description>
+    </plugin>
+    <plugin>
+      <name>Guildwork</name>
+      <version>1.4.4.10</version>
+      <description>Interface with guildwork.com</description>
+    </plugin>
+    <plugin>
+      <name>IME</name>
+      <version>1.2.2.4</version>
+      <description>Allows typing in Japanese using the Windows input method editor.</description>
+    </plugin>
+    <plugin>
+      <name>JaZero</name>
+      <version>1.2.2.21</version>
+      <hidden>true</hidden>
+      <description>Eliminates the job ability lock.</description>
+    </plugin>
+    <plugin>
+      <name>LightLuggage</name>
+      <version>5.0.0.4</version>
+      <resources>true</resources>
+      <description>Automatically stack items in your inventory and lot or pass items.</description>
+    </plugin>
+    <plugin>
       <name>LuaCore</name>
-      <version>2.3.2.1</version>
+      <version>2.6.4.4</version>
       <required>true</required>
       <resources>true</resources>
     </plugin>
     <plugin>
-      <name>AutoExec</name>
-      <version>2.8.1.8</version>
-      <description>
-        Automatically run Windower commands in response to events.
-      </description>
-    </plugin>
-    <plugin>
-      <name>Bidder</name>
-      <version>1.4.1.11</version>
-      <description>
-        Open auction and delivery box menus anywhere.
-      </description>
-      <hidden>true</hidden>
-    </plugin>
-    <plugin>
-      <name>Binder</name>
-      <version>1.6.0.0</version>
-      <description>
-        Bind to the macro keys on your gaming keyboard or mouse.
-      </description>
-    </plugin>
-    <plugin>
-      <name>ChatMon</name>
-      <version>1.10.0.6</version>
-      <description>
-        Adds an audible alert in response to chat events.
-      </description>
-    </plugin>
-    <plugin>
-      <name>Config</name>
-      <version>2.0.1.3</version>
-      <description>
-        Adds several configuration options that are automatically applied to characters during play.
-      </description>
-    </plugin>
-    <plugin>
-      <name>DelayMeNot</name>
-      <version>1.0.0.3</version>
-      <description>
-        Removes the default delay for the macro bar with keyboard controls.
-      </description>
-    </plugin>
-    <plugin>
-      <name>FFOChat</name>
-      <version>1.1.1.2</version>
-      <description>
-        Chat on the FFOChat IRC server.
-      </description>
-    </plugin>
-    <plugin>
-      <name>FFXIDB</name>
-      <version>1.2.1.0</version>
-      <description>
-        Displays an in-game minimap.
-      </description>
-    </plugin>
-    <plugin>
-        <name>FishingCrashFix</name>
-        <version>1.0.0.2</version>
-        <description>
-          Fixes the fishing crash introduced in the March 17 fishing update.
-        </description>
-    </plugin>
-    <plugin>
-      <name>Guildwork</name>
-      <version>1.4.4.4</version>
-      <description>
-        Interface with guildwork.com
-      </description>
-    </plugin>
-    <plugin>
-      <name>IME</name>
-      <version>1.2.1.6</version>
-      <description>
-        Allows typing in Japanese using the Windows input method editor.
-      </description>
-    </plugin>
-    <plugin>
-      <name>InfoBar</name>
-      <version>1.2.0.16</version>
-      <resources>true</resources>
-      <description>
-        Displays a configurable bar showing information on your targets.
-      </description>
-    </plugin>
-    <plugin>
-      <name>JaZero</name>
-      <version>1.2.2.17</version>
-      <hidden>true</hidden>
-      <description>
-        Eliminates the job ability lock.
-      </description>
-    </plugin>
-    <plugin>
-      <name>LightLuggage</name>
-      <version>4.0.1.3</version>
-      <resources>true</resources>
-      <description>
-        Automatically stack items in your inventory and lot or pass items.
-      </description>
-    </plugin>
-    <plugin>
       <name>MipmapFix</name>
-      <version>1.0.0.0</version>
-      <description>
-        Fixes the issue SE introduced to make textures look smoother again.
-      </description>
+      <version>1.0.0.4</version>
+      <description>Fixes the issue SE introduced to make textures look smoother again.</description>
     </plugin>
     <plugin>
       <name>PacketFlow</name>
-      <version>0.0.0.7</version>
-      <description>
-        Increase your bandwidth to decrease the odds messages will be dropped.
-      </description>
+      <version>0.0.0.11</version>
       <hidden>true</hidden>
+      <description>Increase your bandwidth to decrease the odds messages will be dropped.</description>
     </plugin>
     <plugin>
       <name>Run</name>
-      <version>1.3.1.5</version>
-      <description>
-        Start or stop external applications through Windower.
-      </description>
+      <version>1.3.1.9</version>
+      <description>Start or stop external applications through Windower.</description>
     </plugin>
     <plugin>
       <name>Sandbox</name>
-      <version>1.0.1.14</version>
-      <description>
-        Fix multiboxing issues by sandboxing elements shared between instances.
-      </description>
+      <version>1.0.1.18</version>
+      <description>Fix multiboxing issues by sandboxing elements shared between instances.</description>
     </plugin>
     <plugin>
       <name>SSOrganizer</name>
-      <version>1.5.1.8</version>
-      <description>
-        Organizes screenshots based on character and area.
-      </description>
-    </plugin>
-    <plugin>
-      <name>StatusTimer</name>
-      <version>1.2.3.2</version>
-      <description>
-        Displays buff timers below your status effects. You really shouldn't use this on retail, SE added a better version years ago. "/statustimer on"
-      </description>
-    </plugin>
-    <plugin>
-      <name>Tickle</name>
-      <version>1.1.2.5</version>
-      <description>
-        Displays the time remaining until your next resting tick.
-      </description>
+      <version>1.5.1.12</version>
+      <description>Organizes screenshots based on character and area.</description>
     </plugin>
     <plugin>
       <name>Timers</name>
-      <version>3.7.6.1</version>
+      <version>3.7.7.7</version>
       <resources>true</resources>
-      <description>
-        Tracks ability and spell recast timers, as well as durations on buffs that you cast.
-      </description>
+      <description>Tracks ability and spell recast timers, as well as durations on buffs that you cast.</description>
     </plugin>
     <plugin>
       <name>WeatherMon</name>
-      <version>1.0.1.11</version>
-      <description>
-        Track and play alerts based on weather changes.
-      </description>
+      <version>1.0.1.15</version>
+      <description>Track and play alerts based on weather changes.</description>
     </plugin>
     <plugin>
       <name>WinControl</name>
-      <version>1.6.2.0</version>
-      <description>
-        Manually control window positioning.
-      </description>
+      <version>1.6.2.4</version>
+      <description>Manually control window positioning.</description>
     </plugin>
   </plugins>
-  <libs>
-    <lib>
-      <name>test</name>
-      <version>1.0.0.0</version>
-    </lib>
-  </libs>
 </update>
-

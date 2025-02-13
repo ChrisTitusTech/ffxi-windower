@@ -29,6 +29,13 @@ end
 function user_setup()
     include('Mote-TreasureHunter')
     state.TreasureMode:options('None','Tag')
+    
+    -- Initialize defense modes - these are set in Mote-Include already
+    -- We just need to set the starting mode
+    state.PhysicalDefenseMode:set('PDT')
+    state.MagicalDefenseMode:set('MDT')
+    state.DefenseMode:set('Magical')
+    
     send_command('bind f9 gs c cycle TreasureMode')
     send_command('bind ^[ input /lockstyle on')
     send_command('bind ` input /ws "Dimidiation" <t>')
@@ -58,6 +65,21 @@ function user_setup()
     end
     
     select_default_macro_book()
+
+    send_command('bind !` gs c auto_rune')
+    add_to_chat(123,'RUN.lua loaded')
+    add_to_chat(158,[[
+        Numpad Controls:
+        0: Foil           Alt-0: Swipe          Ctrl-0: Pflug
+        .: Crusade        Alt-.: Swordplay      Ctrl-.: Elemental Sforzo  
+        3: Refresh        Alt-3: Temper         Ctrl-3: Shell V
+        1: Phalanx        Alt-1: Rayke          Ctrl-1: Protect IV
+        Alt-`: Auto Rune
+        
+        Sub-job Controls (Ctrl):
+        DRK: /: Souleater  *: Weapon Bash  -: Last Resort
+        SAM: /: Meditate   *: Sekkanoki    -: Third Eye
+    ]])
 end
 
 
@@ -148,14 +170,13 @@ function init_gear_sets()
         head="Aya. Zucchetto +2",
         body="Ayanmo Corazza +2",
         hands="Turms Mittens",
-        legs={ name="Samnuha Tights", augments={'STR+9','DEX+8','"Dbl.Atk."+2','"Triple Atk."+2',}},
-        feet={ name="Herculean Boots", augments={'Accuracy+20','"Triple Atk."+3','AGI+8','Attack+10',}},
+        feet="Turms Leggings",
         neck={ name="Futhark Torque", augments={'Path: A',}},
         waist="Ioskeha Belt",
         left_ear={ name="Odnowa Earring +1", augments={'Path: A',}},
         right_ear="Cessance Earring",
         left_ring="Moonbeam Ring",
-        right_ring="Moonbeam Ring",
+        right_ring="Vocane Ring",
         back={ name="Ogma's Cape", augments={'HP+60','Eva.+20 /Mag. Eva.+20','Mag. Evasion+10','"Store TP"+10','Parrying rate+5%',}},
     }
 
@@ -164,22 +185,19 @@ function init_gear_sets()
     })
 
     sets.defense.PDT = {
-        head="Aya. Zucchetto +2",
         body="Runeist Coat +1",
         hands="Turms Mittens",
         legs="Aya. Cosciales +2",
-        feet="Aya. Gambieras +2",
-        neck={ name="Futhark Torque", augments={'Path: A',}},
         waist="Flume Belt",
         left_ear={ name="Odnowa Earring +1", augments={'Path: A',}},
         right_ear="Ethereal Earring",
-        left_ring="Moonbeam Ring",
-        right_ring="Vocane Ring",
     }
     
     sets.engaged.PDT = set_combine(sets.defense.PDT, sets.engaged)
 
     sets.defense.MDT = {
+        body="Runeist Coat +1",
+        legs={ name="Samnuha Tights", augments={'STR+9','DEX+8','"Dbl.Atk."+2','"Triple Atk."+2',}},
 
     }
 
@@ -289,6 +307,8 @@ end
 function job_self_command(cmdParams, eventArgs)
     if cmdParams[1]:lower() == 'rune' then
         send_command('@input /ja '..state.Runes.value..' <me>')
+    elseif cmdParams[1]:lower() == 'auto_rune' then
+        auto_rune()
     end
 end
 -- Called when a player gains or loses a buff.
@@ -332,6 +352,28 @@ function select_default_macro_book()
     	set_macro_page(8, 1)
     else
     	set_macro_page(8, 1)
+    end
+end
+
+function auto_rune()
+    if midaction() then return end
+    
+    if state.DefenseMode.value == 'Magical' then
+        if not buffactive['Ignis'] then
+            send_command('input /ja "Ignis" <me>')
+        elseif not buffactive['Gelus'] then
+            send_command('input /ja "Gelus" <me>')
+        elseif not buffactive['Flabra'] then
+            send_command('input /ja "Flabra" <me>')
+        end
+    else
+        if not buffactive['Tellus'] then
+            send_command('input /ja "Tellus" <me>')
+        elseif not buffactive['Unda'] then
+            send_command('input /ja "Unda" <me>')
+        elseif not buffactive['Sulpor'] then
+            send_command('input /ja "Sulpor" <me>')
+        end
     end
 end
 

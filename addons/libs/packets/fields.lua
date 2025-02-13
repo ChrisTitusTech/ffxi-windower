@@ -106,7 +106,7 @@ do
     end
 
     bufftime = function(ts)
-        return fn(1009810800 + (ts / 60) + 0x100000000 / 60 * 9) -- increment last number every 2.27 years
+        return fn(1009810800 + (ts / 60) + 0x100000000 / 60 * 10) -- increment last number every 2.27 years
     end
 end
 
@@ -1296,7 +1296,7 @@ fields.incoming[0x00A] = L{
     {ctype='signed short',      label='DEX'},                                   -- CE
     {ctype='signed short',      label='VIT'},                                   -- D0
     {ctype='signed short',      label='AGI'},                                   -- D2
-    {ctype='signed short',      label='IND'},                                   -- F4
+    {ctype='signed short',      label='INT'},                                   -- F4
     {ctype='signed short',      label='MND'},                                   -- D6
     {ctype='signed short',      label='CHR'},                                   -- D8
     {ctype='signed short',      label='STR Bonus'},                             -- DA
@@ -3031,12 +3031,12 @@ fields.incoming[0x061] = L{
     {ctype='unsigned short',    label='Attack'},                                -- 30
     {ctype='unsigned short',    label='Defense'},                               -- 32
     {ctype='signed short',      label='Fire Resistance'},                       -- 34
-    {ctype='signed short',      label='Wind Resistance'},                       -- 36
-    {ctype='signed short',      label='Lightning Resistance'},                  -- 38
-    {ctype='signed short',      label='Light Resistance'},                      -- 3A
-    {ctype='signed short',      label='Ice Resistance'},                        -- 3C
-    {ctype='signed short',      label='Earth Resistance'},                      -- 3E
-    {ctype='signed short',      label='Water Resistance'},                      -- 40
+    {ctype='signed short',      label='Ice Resistance'},                        -- 36
+    {ctype='signed short',      label='Wind Resistance'},                       -- 38
+    {ctype='signed short',      label='Earth Resistance'},                      -- 3A
+    {ctype='signed short',      label='Lightning Resistance'},                  -- 3C
+    {ctype='signed short',      label='Water Resistance'},                      -- 3E
+    {ctype='signed short',      label='Light Resistance'},                      -- 40
     {ctype='signed short',      label='Dark Resistance'},                       -- 42
     {ctype='unsigned short',    label='Title',           fn=title},             -- 44
     {ctype='unsigned short',    label='Nation rank'},                           -- 46
@@ -3426,6 +3426,20 @@ fields.incoming[0x0A0] = L{
 }
 
 --0x0AA, 0x0AC, and 0x0AE are all bitfields where the lsb indicates whether you have index 0 of the related resource.
+fields.incoming[0x0AA] = L{
+    {ctype='data[0x80]',        label='Spells'},                                -- 04
+}
+
+fields.incoming[0x0AC] = L{
+    {ctype='data[0x40]',        label='Weapon Skills'},                         -- 04
+    {ctype='data[0x40]',        label='Job Abilities'},                         -- 44
+    {ctype='data[0x40]',        label='Pet Abilities'},                         -- 84
+    {ctype='data[0x20]',        label='Job Traits'},                            -- C4
+}
+
+fields.incoming[0x0AE] = L{
+    {ctype='data[7]',        label='Mounts'},                                -- 04
+}
 
 -- Moblin Maze Mongers information
 -- It appears that they anticipated a substantial expansion of the system,

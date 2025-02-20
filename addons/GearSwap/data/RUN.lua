@@ -13,8 +13,12 @@ function get_sets()
     -- Additional local binds
     include('Global-Binds.lua')
     state.Runes = {"Tellus","Unda","Flabra","Ignis","Gelus","Sulpor","Lux","Tenebrae"}
+    
+    -- Initialize the timer
+    auto_rune_timer = os.clock()
+    auto_hasso_timer = os.clock()
+    send_command('wait 1; gs c check_auto')
 end
-
 
 -- Setup vars that are user-independent.
 function job_setup()
@@ -22,6 +26,14 @@ function job_setup()
     state.Buff.Vallation = buffactive.vallation or false
     state.Buff.Valiance = buffactive.valiance or false
     state.Buff.Swordplay = buffactive.swordplay or false
+    state.Buff.Hasso = buffactive.hasso or false
+    
+    -- Add auto-rune timer
+    auto_rune_timer = os.clock()
+    auto_hasso_timer = os.clock()
+    
+    -- Change AutoCheck to use modes
+    state.AutoCheck = M{['description']='Auto Check', 'On', 'Off'}
 end
 
 
@@ -67,7 +79,10 @@ function user_setup()
     select_default_macro_book()
 
     send_command('bind !` gs c auto_rune')
+    send_command('bind !h gs c auto_hasso')
+    send_command('bind !a gs c autocheck')
     add_to_chat(123,'RUN.lua loaded')
+    add_to_chat(122,'Auto Check: ' .. state.AutoCheck.value)
     add_to_chat(158,[[
         Numpad Controls:
         0: Foil           Alt-0: Swipe          Ctrl-0: Pflug
@@ -75,11 +90,32 @@ function user_setup()
         3: Refresh        Alt-3: Temper         Ctrl-3: Shell V
         1: Phalanx        Alt-1: Rayke          Ctrl-1: Protect IV
         Alt-`: Auto Rune
+        Alt-a: Toggle Auto Check
         
         Sub-job Controls (Ctrl):
         DRK: /: Souleater  *: Weapon Bash  -: Last Resort
         SAM: /: Meditate   *: Sekkanoki    -: Third Eye
+             Alt-h: Auto Hasso
     ]])
+
+    -- Add this line near the start of user_setup()
+    state.OffenseMode:options('Normal', 'TP')
+    
+    -- Add this keybind (you can change F12 to another key if you prefer)
+    send_command('bind F12 gs c cycle OffenseMode')
+    
+    -- Add this to your existing setup message
+    add_to_chat(158,'F12: Cycle Offense Mode: ' .. state.OffenseMode.value)
+    send_command('asc on')
+
+    -- Add weapon options
+    state.WeaponSet = M{['description']='Weapon Set', 'Epeolatry', 'Axe'}
+    
+    -- Add keybind for weapon swap (using Windows key + W, but you can change this)
+    send_command('bind @w gs c cycle WeaponSet')
+    
+    -- Add to your existing setup message
+    add_to_chat(158,'Win+W: Cycle Weapon Set: ' .. state.WeaponSet.value)
 end
 
 
@@ -90,6 +126,8 @@ function file_unload()
     end
     
     send_command('unbind ^[')
+    send_command('unbind F12')
+    send_command('unbind @w')
 end
 
 -- Define sets and vars used by this job file.
@@ -99,6 +137,7 @@ function init_gear_sets()
     --------------------------------------
     
     -- Precast sets to enhance JAs
+    sets.precast.JA['Vivacious Pulse'] = { head="Erilaz Galea +1" }  
     sets.precast.JA.Swordplay = { hands="Futhark Mitons +1" }
     sets.precast.Effusion = {}
 
@@ -127,7 +166,6 @@ function init_gear_sets()
         --hands="Thaumas Gloves",
         ring1="Prolix Ring",
         legs="Aya. Cosciales +2",
-        feet="Chelona Boots"
     }
     sets.precast.FC['Enhancing Magic'] = set_combine(sets.precast.FC, {
         legs="Futhark Trousers"
@@ -164,12 +202,12 @@ function init_gear_sets()
     
     -- Engaged sets
     sets.engaged = {
-        main="Epeolatry",
         sub="Eletta Grip",
         ammo="Staunch Tathlum",
         head="Aya. Zucchetto +2",
-        body="Ayanmo Corazza +2",
+        body="Turms Harness",
         hands="Turms Mittens",
+        legs="Eri. Leg Guards +2",
         feet="Turms Leggings",
         neck={ name="Futhark Torque", augments={'Path: A',}},
         waist="Ioskeha Belt",
@@ -185,9 +223,8 @@ function init_gear_sets()
     })
 
     sets.defense.PDT = {
-        body="Runeist Coat +1",
+        body="Ayanmo Corazza +2",
         hands="Turms Mittens",
-        legs="Aya. Cosciales +2",
         waist="Flume Belt",
         left_ear={ name="Odnowa Earring +1", augments={'Path: A',}},
         right_ear="Ethereal Earring",
@@ -196,8 +233,6 @@ function init_gear_sets()
     sets.engaged.PDT = set_combine(sets.defense.PDT, sets.engaged)
 
     sets.defense.MDT = {
-        body="Runeist Coat +1",
-        legs={ name="Samnuha Tights", augments={'STR+9','DEX+8','"Dbl.Atk."+2','"Triple Atk."+2',}},
 
     }
 
@@ -209,9 +244,11 @@ function init_gear_sets()
     -- Weaponskill sets --
     sets.precast.WS = {
         ammo="Hagneia Stone",
+        body="Ayanmo Corazza +2",
+        hands="Aya. Manopolas +2",
         legs={ name="Samnuha Tights", augments={'STR+9','DEX+8','"Dbl.Atk."+2','"Triple Atk."+2',}},
-        neck="Asperity Necklace",
-        waist="Ioskeha Belt",
+        neck="Fotia Gorget",
+        waist="Fotia Belt",
         left_ear="Brutal Earring",
         right_ear="Cessance Earring",
         right_ring="Chirich Ring",
@@ -225,7 +262,37 @@ function init_gear_sets()
     sets.precast.WS.Dimidiation = set_combine(sets.precast.WS, {
         
     })
+
+    sets.engaged.TP={
+        sub="Eletta Grip",
+        ammo="Hagneia Stone",
+        head="Aya. Zucchetto +2",
+        body="Turms Harness",
+        hands={ name="Herculean Gloves", augments={'Accuracy+25','"Triple Atk."+3','Attack+14',}},
+        legs={ name="Samnuha Tights", augments={'STR+9','DEX+8','"Dbl.Atk."+2','"Triple Atk."+2',}},
+        feet={ name="Herculean Boots", augments={'Accuracy+20','"Triple Atk."+3','AGI+8','Attack+10',}},
+        neck="Asperity Necklace",
+        waist="Ioskeha Belt",
+        left_ear="Brutal Earring",
+        right_ear="Cessance Earring",
+        left_ring="Moonbeam Ring",
+        right_ring="Chirich Ring",
+        back={ name="Ogma's Cape", augments={'HP+60','Eva.+20 /Mag. Eva.+20','Mag. Evasion+10','"Store TP"+10','Parrying rate+5%',}},
+    }
+
+    sets.naked = {main=empty,sub=empty,range=empty,ammo=empty,
+                head=empty,neck=empty,ear1=empty,ear2=empty,
+                body=empty,hands=empty,ring1=empty,ring2=empty,
+                back=empty,waist=empty,legs=empty,feet=empty}
     
+    -- Add weapon sets near the start of init_gear_sets()
+    sets.weapons = {}
+    sets.weapons.Epeolatry = {
+        main="Epeolatry",
+    }
+    sets.weapons.Axe = {
+        main="Hepatizon Axe +1",
+    }
 end
 
 
@@ -294,6 +361,13 @@ end
 
 -- Modify the default melee set after it was constructed.
 function customize_melee_set(meleeSet)
+    -- First apply the weapon set
+    meleeSet = set_combine(meleeSet, sets.weapons[state.WeaponSet.value])
+    
+    -- Then apply TP set if needed
+    if state.OffenseMode.value == 'TP' then
+        return set_combine(meleeSet, sets.engaged.TP)
+    end
     return meleeSet
 end
 
@@ -309,6 +383,28 @@ function job_self_command(cmdParams, eventArgs)
         send_command('@input /ja '..state.Runes.value..' <me>')
     elseif cmdParams[1]:lower() == 'auto_rune' then
         auto_rune()
+    elseif cmdParams[1]:lower() == 'auto_hasso' then
+        auto_hasso()
+    elseif cmdParams[1]:lower() == 'check_auto' then
+        if state.AutoCheck.value == 'On' then
+            if os.clock() - auto_rune_timer > 3 then
+                auto_rune()
+                auto_rune_timer = os.clock()
+            end
+            if os.clock() - auto_hasso_timer > 3 then
+                auto_hasso()
+                auto_hasso_timer = os.clock()
+            end
+            send_command('wait 3; gs c check_auto')
+        end
+    elseif cmdParams[1]:lower() == 'autocheck' then
+        add_to_chat(122,'Auto Check: ' .. state.AutoCheck.value)
+        if state.AutoCheck.value == 'Off' then
+            state.AutoCheck:set('On')
+            send_command('gs c check_auto')
+        elseif state.AutoCheck.value == 'On' then
+            state.AutoCheck:set('Off')
+        end
     end
 end
 -- Called when a player gains or loses a buff.
@@ -316,7 +412,7 @@ end
 -- gain == true if the buff was gained, false if it was lost.
 function job_buff_change(buff, gain)
     if state.Buff[buff] ~= nil then
-    	state.Buff[buff] = gain
+        state.Buff[buff] = gain
         handle_equipping_gear(player.status)
     end
 end
@@ -332,8 +428,13 @@ function job_update(cmdParams, eventArgs)
     --state.CombatWeapon = get_combat_weapon()
 end
 
-function status_change(new,action)
+function status_change(new, old)
     send_command('input /lockstyle on')
+    
+    -- Check for Hasso when engaging in combat
+    if new == 'Engaged' and player.sub_job == 'SAM' and not buffactive['Hasso'] then
+        send_command('wait 1; input /ja "Hasso" <me>')
+    end
 end
 
 -- Set eventArgs.handled to true if we don't want the automatic display to be run.
@@ -356,7 +457,7 @@ function select_default_macro_book()
 end
 
 function auto_rune()
-    if midaction() then return end
+    if midaction() or player.status ~= 'Engaged' then return end
     
     if state.DefenseMode.value == 'Magical' then
         if not buffactive['Ignis'] then
@@ -377,3 +478,8 @@ function auto_rune()
     end
 end
 
+function auto_hasso()   
+    if player.status == 'Engaged' and player.sub_job == 'SAM' and not buffactive['Hasso'] and not midaction() then
+        send_command('input /ja "Hasso" <me>')
+    end
+end

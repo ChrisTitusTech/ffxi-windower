@@ -59,4 +59,8 @@ wait 30
 
 lua load GearInfo
 lua load AutoSkillchain
+lua load SellNPC
+lua load organizer
+lua load Sparks
+lua load Treasury
 config FrameRateDivisor 1

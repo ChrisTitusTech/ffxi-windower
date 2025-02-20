@@ -1,0 +1,13 @@
+C:\Program Files (x86)\Windower\Clipper\Clipper\obj\Debug\Clipper.csproj.AssemblyReference.cache
+C:\Program Files (x86)\Windower\Clipper\Clipper\bin\Debug\Clipper.exe.config
+C:\Program Files (x86)\Windower\Clipper\Clipper\bin\Debug\Clipper.exe
+C:\Program Files (x86)\Windower\Clipper\Clipper\bin\Debug\Clipper.pdb
+C:\Program Files (x86)\Windower\Clipper\Clipper\obj\Debug\Clipper.frmAbout.resources
+C:\Program Files (x86)\Windower\Clipper\Clipper\obj\Debug\Clipper.frmMain.resources
+C:\Program Files (x86)\Windower\Clipper\Clipper\obj\Debug\Clipper.frmSelectCharacter.resources
+C:\Program Files (x86)\Windower\Clipper\Clipper\obj\Debug\Clipper.frmSettings.resources
+C:\Program Files (x86)\Windower\Clipper\Clipper\obj\Debug\Clipper.Properties.Resources.resources
+C:\Program Files (x86)\Windower\Clipper\Clipper\obj\Debug\Clipper.csproj.GenerateResource.cache
+C:\Program Files (x86)\Windower\Clipper\Clipper\obj\Debug\Clipper.csproj.CoreCompileInputs.cache
+C:\Program Files (x86)\Windower\Clipper\Clipper\obj\Debug\Clipper.exe
+C:\Program Files (x86)\Windower\Clipper\Clipper\obj\Debug\Clipper.pdb

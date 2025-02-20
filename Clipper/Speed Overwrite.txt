@@ -1,0 +1,16 @@
+FFXiMain.dll+91438 - 89 54 24 20           - mov [esp+20],edx
+FFXiMain.dll+9143C - 8B 0C 85 48C59F0A     - mov ecx,[eax*4+FFXiMain.dll+40C548]
+FFXiMain.dll+91443 - DB 44 24 20           - fild dword ptr [esp+20]
+FFXiMain.dll+91447 - 33 D2                 - xor edx,edx
+FFXiMain.dll+91449 - 33 C0                 - xor eax,eax
+FFXiMain.dll+9144B - D8 0D 48608C0A        - fmul dword ptr [FFXiMain.dll+2D6048]
+FFXiMain.dll+91451 - D9 99 34010000        - fstp dword ptr [ecx+00000134]
+FFXiMain.dll+91457 - 8A 56 33              - mov dl,[esi+33]
+FFXiMain.dll+9145A - 8A 46 32              - mov al,[esi+32]
+FFXiMain.dll+9145D - C1 E2 08              - shl edx,08
+FFXiMain.dll+91460 - 03 D0                 - add edx,eax
+FFXiMain.dll+91462 - 33 C9                 - xor ecx,ecx
+
+
+
+89 54 24 20 8B 0C 85 ?? ?? ?? ?? DB 44 24 20 33 D2 33 C0 D8 0D ?? ?? ?? ?? D9 99 ?? ?? ?? ?? 8A 56 33

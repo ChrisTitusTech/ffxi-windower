@@ -182,8 +182,8 @@ function user_setup()
     select_default_macro_book()
 
     -- Adjust the X (horizontal) and Y (vertical) position here to adjust the window
-    pos_x = 0
-    pos_y = 0
+    pos_x = 1850
+    pos_y = 300
     setupTextWindow(pos_x, pos_y)
     
 end
@@ -403,7 +403,7 @@ function init_gear_sets()
         range="Animator P II",
         ammo="Automat. Oil +3",
         head="Tali'ah Turban +1",
-        body="Tali'ah Manteel +2",
+        body="Tali'ah --Manteel +2",
         hands={ name="Herculean Gloves", augments={'Accuracy+25','"Triple Atk."+3','Attack+14',}},
         legs="Tali'ah Sera. +1",
         feet="Tali'ah Crackows +1",
@@ -569,7 +569,7 @@ function init_gear_sets()
     sets.idle.Pet = {
         range="Animator P II",
         ammo="Automat. Oil +3",
-        head={ name="Anwig Salade", augments={'Attack+3','Pet: Damage taken -10%','Attack+3','Pet: "Regen"+1',}},
+        head="Heyoka Cap",
         body="Heyoka Harness",
         hands="Heyoka Mittens",
         legs="Heyoka Subligar",
@@ -610,7 +610,7 @@ function init_gear_sets()
         main="Denouements",
         range="Animator P II",
         ammo="Automat. Oil +3",
-        head={ name="Anwig Salade", augments={'Attack+3','Pet: Damage taken -10%','Attack+3','Pet: "Regen"+1',}},
+        head="Heyoka Cap",
         body="Heyoka Harness",
         hands="Heyoka Mittens",
         legs="Heyoka Subligar",
@@ -641,7 +641,7 @@ function init_gear_sets()
         main="Denouements",
         range="Animator P II",
         ammo="Automat. Oil +3",
-        head={ name="Anwig Salade", augments={'Attack+3','Pet: Damage taken -10%','Attack+3','Pet: "Regen"+1',}},
+        head="Heyoka Cap",
         body="Heyoka Harness",
         hands="Heyoka Mittens",
         legs="Heyoka Subligar",

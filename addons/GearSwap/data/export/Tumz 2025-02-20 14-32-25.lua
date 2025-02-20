@@ -1,0 +1,17 @@
+sets.exported={
+    main="Epeolatry",
+    sub="Eletta Grip",
+    ammo="Hagneia Stone",
+    head="Aya. Zucchetto +2",
+    body="Turms Harness",
+    hands={ name="Herculean Gloves", augments={'Accuracy+25','"Triple Atk."+3','Attack+14',}},
+    legs={ name="Samnuha Tights", augments={'STR+9','DEX+8','"Dbl.Atk."+2','"Triple Atk."+2',}},
+    feet={ name="Herculean Boots", augments={'Accuracy+20','"Triple Atk."+3','AGI+8','Attack+10',}},
+    neck="Asperity Necklace",
+    waist="Ioskeha Belt",
+    left_ear="Brutal Earring",
+    right_ear="Cessance Earring",
+    left_ring="Moonbeam Ring",
+    right_ring="Chirich Ring",
+    back={ name="Ogma's Cape", augments={'HP+60','Eva.+20 /Mag. Eva.+20','Mag. Evasion+10','"Store TP"+10','Parrying rate+5%',}},
+}

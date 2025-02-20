@@ -44,5 +44,6 @@ lua load Silence;
 lua load targetinfo;
 lua load timestamp;
 lua load TParty;
+lua load Treasury;
 lua load xivbar;
 exec init.txt;

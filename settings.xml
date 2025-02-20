@@ -1,5 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <settings>
+  <launcher>
+    <branch>stable</branch>
+  </launcher>
   <autoload>
     <addon>aecho</addon>
     <addon>autocontrol</addon>
@@ -30,6 +33,8 @@
     <addon>timestamp</addon>
     <addon>TParty</addon>
     <addon>xivbar</addon>
+    <addon>Treasury</addon>
+    <addon>organizer</addon>
     <plugin>DelayMeNot</plugin>
     <plugin>ChatMon</plugin>
     <plugin>FFXIDB</plugin>

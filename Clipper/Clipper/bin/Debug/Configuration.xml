@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <AlwaysOnTop>false</AlwaysOnTop>
+  <MinimizeToTray>true</MinimizeToTray>
+  <ZoneDelay>10</ZoneDelay>
+  <Signatures>
+    <Signature name="NPCMAP" pattern="2A8B0485FFFFFFFF85C00F84" mask="xxxx????xxxx" offset="4" />
+    <Signature name="OWNPOS" pattern="66C7442410790050" mask="xxxxxxxx" offset="37" />
+    <Signature name="TARGET" pattern="53568BF18B480433DB3BCB75065E33C05B59C38B0D" mask="xxxxxxxxxxxxxxxxxxxxx" offset="45" />
+    <Signature name="JAWAIT0_1" pattern="8A4424043C0175FF8B81FCFFFFFFFF89" mask="xxxxxxx?xxx????x" offset="14" />
+    <Signature name="JAWAIT0_2" pattern="FFFFFFFFFFFFFF66C781FFFFFFFF0807C3" mask="???????xxx????xxx" offset="0" />
+    <Signature name="ZONEID" pattern="8B81FFFFFFFF8B0DFFFFFFFF508B91FFFFFFFF52E8" mask="xx????xx????xxx????xx" offset="8" />
+  </Signatures>
+  <Offsets>
+    <Offset name="PTR_OWNPOS" value="4" />
+    <Offset name="MOB_NAME" value="124" />
+    <Offset name="MOB_WARP" value="160" />
+    <Offset name="MOB_DISTANCE" value="216" />
+    <Offset name="MOB_TYPE" value="238" />
+    <Offset name="MOB_RENDER" value="288" />
+    <Offset name="MOB_FLAG" value="296" />
+    <Offset name="MOB_SPEED" value="348" />
+    <Offset name="MOB_STATUS" value="364" />
+    <Offset name="MOB_SPAWNTYPE" value="464" />
+    <Offset name="WARP_POSX_1" value="52" />
+    <Offset name="WARP_POSY_1" value="60" />
+    <Offset name="WARP_POSZ_1" value="56" />
+    <Offset name="WARP_POSX_2" value="1476" />
+    <Offset name="WARP_POSY_2" value="1484" />
+    <Offset name="WARP_POSZ_2" value="1480" />
+  </Offsets>
+  <Patches>
+    <Patch name="JAWAIT0_1" enabled="90" disabled="40" />
+    <Patch name="JAWAIT0_2" enabled="90909090909090" disabled="66FF811C010000" />
+  </Patches>
+  <ExcludedPlayers>
+  </ExcludedPlayers>
+  <ExcludedZones />
+</Configuration>

@@ -1,0 +1,36 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Program Files (x86)\\Windower\\Clipper\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{E7FBB407-10EE-4112-9F64-769110364ACA}|Clipper\\Clipper.csproj|c:\\program files (x86)\\windower\\clipper\\clipper\\frmselectcharacter.resx||{81828910-B8B3-4D2B-99A3-067027C180C1}",
+      "RelativeMoniker": "D:0:0:{E7FBB407-10EE-4112-9F64-769110364ACA}|Clipper\\Clipper.csproj|solutionrelative:clipper\\frmselectcharacter.resx||{81828910-B8B3-4D2B-99A3-067027C180C1}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "frmSelectCharacter.resx",
+              "DocumentMoniker": "C:\\Program Files (x86)\\Windower\\Clipper\\Clipper\\frmSelectCharacter.resx",
+              "RelativeDocumentMoniker": "Clipper\\frmSelectCharacter.resx",
+              "ToolTip": "C:\\Program Files (x86)\\Windower\\Clipper\\Clipper\\frmSelectCharacter.resx",
+              "RelativeToolTip": "Clipper\\frmSelectCharacter.resx",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
+              "WhenOpened": "2025-02-17T03:44:58.646Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

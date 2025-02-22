@@ -1,0 +1,42 @@
+<?xml version="1.1" ?>
+<settings>
+    <global>
+        <auto_heal>false</auto_heal>
+        <bag_priority>
+            <Case>7</Case>
+            <Inventory>8</Inventory>
+            <Locker>3</Locker>
+            <Sack>6</Sack>
+            <Safe>1</Safe>
+            <Safe2>2</Safe2>
+            <Satchel>5</Satchel>
+            <Storage>4</Storage>
+            <Wardrobe>9</Wardrobe>
+            <Wardrobe2>10</Wardrobe2>
+            <Wardrobe3>11</Wardrobe3>
+            <Wardrobe4>12</Wardrobe4>
+            <Wardrobe5>13</Wardrobe5>
+            <Wardrobe6>14</Wardrobe6>
+            <Wardrobe7>15</Wardrobe7>
+            <Wardrobe8>16</Wardrobe8>
+        </bag_priority>
+        <default_file>default.lua</default_file>
+        <dump_bags>
+            <Locker>3</Locker>
+            <Safe>1</Safe>
+            <Safe2>2</Safe2>
+            <Storage>4</Storage>
+        </dump_bags>
+        <ignore>
+
+        </ignore>
+        <item_delay>0</item_delay>
+        <retain>
+            <items>false</items>
+            <moogle_slip_gear>false</moogle_slip_gear>
+            <seals>false</seals>
+            <slips>false</slips>
+        </retain>
+        <verbose>false</verbose>
+    </global>
+</settings>

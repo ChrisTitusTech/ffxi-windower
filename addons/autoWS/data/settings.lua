@@ -527,6 +527,17 @@ return {
                 ['tpThreshold'] = 999,
                 ['ws_cmd'] = '/ws "Victory Smite" <t>'
             }
+        },
+        ['SMN'] = {
+            ['Staff'] = {
+                ['hps'] = {
+                    ['<'] = 100,
+                    ['>'] = 5
+                },
+                ['mobs'] = {},
+                ['tpThreshold'] = 999,
+                ['ws_cmd'] = '/ws "Full Swing" <t>'
+            }
         }
     },
     ['hps'] = {

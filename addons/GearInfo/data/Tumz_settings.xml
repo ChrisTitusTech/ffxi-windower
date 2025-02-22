@@ -65,15 +65,15 @@
         </Geos>
         <display>
             <pos>
-                <x>1397</x>
-                <y>990</y>
+                <x>1550</x>
+                <y>1000</y>
             </pos>
         </display>
         <image_folder_name>default</image_folder_name>
         <player>
             <rank>1</rank>
             <show_COR_messages>true</show_COR_messages>
-            <show_DW_Stuff>true</show_DW_Stuff>
+            <show_DW_Stuff>false</show_DW_Stuff>
             <show_Defence>true</show_Defence>
             <show_Evasion>true</show_Evasion>
             <show_MA_Stuff>true</show_MA_Stuff>
@@ -81,7 +81,7 @@
             <show_acc_Stuff>true</show_acc_Stuff>
             <show_att_Stuff>true</show_att_Stuff>
             <show_dt_Stuff>true</show_dt_Stuff>
-            <show_logo>true</show_logo>
+            <show_logo>false</show_logo>
             <show_total_haste>true</show_total_haste>
             <show_tp_Stuff>true</show_tp_Stuff>
             <update_gs>true</update_gs>

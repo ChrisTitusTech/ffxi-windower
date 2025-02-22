@@ -35,6 +35,11 @@
     <addon>xivbar</addon>
     <addon>Treasury</addon>
     <addon>organizer</addon>
+    <addon>ConsoleBG</addon>
+    <addon>enemybar</addon>
+    <addon>enternity</addon>
+    <addon>porter</addon>
+    <addon>setbgm</addon>
     <plugin>DelayMeNot</plugin>
     <plugin>ChatMon</plugin>
     <plugin>FFXIDB</plugin>

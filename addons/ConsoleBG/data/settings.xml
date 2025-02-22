@@ -1,0 +1,19 @@
+<?xml version="1.1" ?>
+<settings>
+    <global>
+        <bg>
+            <alpha>192</alpha>
+            <blue>0</blue>
+            <green>0</green>
+            <red>0</red>
+        </bg>
+        <extents>
+            <x>7680</x>
+            <y>360</y>
+        </extents>
+        <pos>
+            <x>0</x>
+            <y>0</y>
+        </pos>
+    </global>
+</settings>

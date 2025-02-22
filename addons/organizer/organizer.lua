@@ -239,9 +239,11 @@ end
 
 windower.register_event('addon command',function(...)
     local inp = {...}
-    -- get (g) = Take the passed file and move everything to its defined location.
-    -- tidy (t) = Take the passed file and move everything that isn't in it out of my active inventory.
-    -- organize (o) = get followed by tidy.
+    -- Check if any arguments were provided
+    if #inp == 0 then
+        org_message('No command specified. Available commands: get/g, tidy/t, freeze/f, organize/o')
+        return
+    end
     local command = table.remove(inp,1):lower()
     if command == 'eval' then
         assert(loadstring(table.concat(inp,' ')))()

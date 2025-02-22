@@ -202,9 +202,7 @@ function init_gear_sets()
     
     -- Engaged sets
     sets.engaged = {
-        sub="Eletta Grip",
-        ammo="Staunch Tathlum",
-        head="Aya. Zucchetto +2",
+        head="Erilaz Galea +2",
         body="Turms Harness",
         hands="Turms Mittens",
         legs="Eri. Leg Guards +2",
@@ -213,8 +211,6 @@ function init_gear_sets()
         waist="Ioskeha Belt",
         left_ear={ name="Odnowa Earring +1", augments={'Path: A',}},
         right_ear="Cessance Earring",
-        left_ring="Moonbeam Ring",
-        right_ring="Vocane Ring",
         back={ name="Ogma's Cape", augments={'HP+60','Eva.+20 /Mag. Eva.+20','Mag. Evasion+10','"Store TP"+10','Parrying rate+5%',}},
     }
 
@@ -223,17 +219,27 @@ function init_gear_sets()
     })
 
     sets.defense.PDT = {
+        sub="Refined Grip +1",
+        ammo="Staunch Tathlum",
+        head="Erilaz Galea +2",
         body="Ayanmo Corazza +2",
         hands="Turms Mittens",
         waist="Flume Belt",
         left_ear={ name="Odnowa Earring +1", augments={'Path: A',}},
         right_ear="Ethereal Earring",
+        left_ring="Moonbeam Ring",
+        right_ring="Moonbeam Ring",
     }
     
     sets.engaged.PDT = set_combine(sets.defense.PDT, sets.engaged)
 
     sets.defense.MDT = {
-
+        sub="Refined Grip +1",
+        ammo="Staunch Tathlum",
+        head="Erilaz Galea +2",
+        left_ear={ name="Odnowa Earring +1", augments={'Path: A',}},
+        left_ring="Moonbeam Ring",
+        right_ring="Moonbeam Ring",
     }
 
     sets.engaged.MDT = set_combine(sets.defense.MDT, sets.engaged)
@@ -263,11 +269,11 @@ function init_gear_sets()
         
     })
 
-    sets.engaged.TP={
+    sets.engaged.TP = {
         sub="Eletta Grip",
         ammo="Hagneia Stone",
-        head="Aya. Zucchetto +2",
-        body="Turms Harness",
+        head="Adhemar Bonnet",
+        body="Ayanmo Corazza +2",
         hands={ name="Herculean Gloves", augments={'Accuracy+25','"Triple Atk."+3','Attack+14',}},
         legs={ name="Samnuha Tights", augments={'STR+9','DEX+8','"Dbl.Atk."+2','"Triple Atk."+2',}},
         feet={ name="Herculean Boots", augments={'Accuracy+20','"Triple Atk."+3','AGI+8','Attack+10',}},
@@ -275,7 +281,7 @@ function init_gear_sets()
         waist="Ioskeha Belt",
         left_ear="Brutal Earring",
         right_ear="Cessance Earring",
-        left_ring="Moonbeam Ring",
+        left_ring="Epona's Ring",
         right_ring="Chirich Ring",
         back={ name="Ogma's Cape", augments={'HP+60','Eva.+20 /Mag. Eva.+20','Mag. Evasion+10','"Store TP"+10','Parrying rate+5%',}},
     }

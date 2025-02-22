@@ -1,7 +1,7 @@
 return {
 	{
-		['name'] = 'gravitation',
+		['name'] = 'compression',
 		['repeat'] = true,
-		['ws'] = L{'Garland of Bliss','Shattersoul'}
+		['ws'] = L{'Full Swing', 'Retribution'}
 	},
 }

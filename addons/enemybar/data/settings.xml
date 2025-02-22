@@ -1,0 +1,11 @@
+<?xml version="1.1" ?>
+<settings>
+    <global>
+        <font>Arial</font>
+        <font_size>14</font_size>
+        <pos>
+            <x>800</x>
+            <y>800</y>
+        </pos>
+    </global>
+</settings>

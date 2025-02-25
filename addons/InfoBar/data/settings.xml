@@ -48,12 +48,9 @@
     <tumz>
         <display>
             <pos>
-                <x>1780</x>
-                <y>1</y>
+                <x>715</x>
+                <y>-2</y>
             </pos>
-            <text>
-                <blue>128</blue>
-            </text>
         </display>
     </tumz>
 </settings>

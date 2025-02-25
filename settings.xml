@@ -54,4 +54,8 @@
     <uiscale>1.2</uiscale>
     <supersampling>2</supersampling>
   </profile>
+  <profile name="1080p">
+    <consolekey>Insert</consolekey>
+    <uiscale>1</uiscale>
+  </profile>
 </settings>

@@ -11,7 +11,14 @@ function get_sets()
 end
 
 function user_setup()
+    -- Add state tracking for healbot
+    state = state or {}
+    state.HealBot = M(false, 'HealBot')
+    
+    -- Create a keybind for toggling healbot
+    send_command('bind @h gs c toggle HealBot')
     send_command('lua load healbot')
+    
     set_macro_page(1, 1)
 end
 
@@ -20,6 +27,10 @@ function file_unload()
     	binds_on_unload()
     end
     
+    -- Remove our custom keybind
+    send_command('unbind @h')
+    
+    -- Only unload healbot if it was loaded
     send_command('lua unload healbot')
 end
 
@@ -159,5 +170,19 @@ function status_change(new,old)
         equip(sets.engaged)
     else
         equip(sets.idle)
+    end
+end
+
+-- Add a new self_command function to handle the toggle
+function self_command(command)
+    if command == 'toggle HealBot' then
+        state.HealBot:toggle()
+        if state.HealBot.value then
+            send_command('hb on')
+            windower.add_to_chat(158,'HealBot: ON')
+        else
+            send_command('hb off')
+            windower.add_to_chat(158,'HealBot: OFF')
+        end
     end
 end

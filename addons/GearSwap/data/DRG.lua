@@ -34,6 +34,15 @@ end
 
 -- Setup vars that are user-independent.
 function job_setup()
+    -- Add TH state
+    include('Mote-TreasureHunter')
+    state.TreasureMode:options('None','Tag')
+    
+    -- Initialize other states
+    state.Buff = {}
+    
+    -- Add auto-hasso timer
+    auto_hasso_timer = os.clock()
 
     no_swap_gear = S{"Warp Ring", "Dim. Ring (Dem)", "Dim. Ring (Holla)", "Dim. Ring (Mea)",
               "Trizek Ring", "Echad Ring", "Facility Ring", "Capacity Ring"}
@@ -50,7 +59,7 @@ end
 -------------------------------------------------------------------------------------------------------------------
 
 function user_setup()
-    state.OffenseMode:options('Normal', 'LowAcc', 'MidAcc', 'HighAcc', 'MaxAcc', 'STP')
+    state.OffenseMode:options('Normal', 'Acc', 'STP')
     state.WeaponskillMode:options('Normal', 'Acc')
     state.HybridMode:options('Normal', 'DT')
     state.IdleMode:options('Normal', 'DT')
@@ -65,7 +74,6 @@ function user_setup()
     send_command('bind !` input /ja "Spirit Link" <me>')
     send_command('bind @` input /ja "Dismiss" <me>')
     send_command('bind @a gs c cycle AttackMode')
-    -- send_command('bind @c gs c toggle CP')
 
     if player.sub_job == 'WAR' then
         send_command('bind !w input /ja "Defender" <me>')
@@ -105,6 +113,16 @@ function user_setup()
 
     state.Auto_Kite = M(false, 'Auto_Kite')
     moving = false
+
+    -- Add TH toggle
+    send_command('bind f9 gs c cycle TreasureMode')
+    
+    -- Add auto-hasso toggle
+    send_command('bind !h gs c auto_hasso')
+    
+    -- Add to your setup message
+    add_to_chat(158,'F9: Toggle Treasure Hunter')
+    add_to_chat(158,'Alt-h: Auto Hasso')
 end
 
 function user_unload()
@@ -150,84 +168,89 @@ function init_gear_sets()
     ---------------------------------------- Precast Sets ------------------------------------------
     ------------------------------------------------------------------------------------------------
 
-    sets.precast.JA['Spirit Surge'] = {body="Ptero. Mail +3"}
-    sets.precast.JA['Call Wyvern'] = {body="Ptero. Mail +3"}
-    sets.precast.JA['Ancient Circle'] = {legs="Vishap Brais +3"}
+    sets.precast.JA['Spirit Surge'] = {
+        -- body="Ptero. Mail +3"
+    }
+
+    sets.precast.JA['Call Wyvern'] = {
+        -- body="Ptero. Mail +3"
+    }
+
+    sets.precast.JA['Ancient Circle'] = {
+        -- legs="Vishap Brais +3"
+    }
 
     sets.precast.JA['Spirit Link'] = {
         head="Vishap Armet",
         -- hands="Pel. Vambraces +1",
         -- feet="Ptero. Greaves +3",
-        ear1="Pratik Earring",
-        }
+        -- ear1="Pratik Earring",
+    }
 
     sets.precast.JA['Steady Wing'] = {
         -- legs="Vishap Brais +3",
         -- feet="Ptero. Greaves +3",
         -- neck="Chanoix's Gorget",
-        ear1="Lancer's Earring",
-        ear2="Anastasi Earring",
+        -- ear1="Lancer's Earring",
+        --ear2="Anastasi Earring",
         back="Updraft Mantle",
-        }
+    }
 
     sets.precast.JA['Jump'] = {
-        -- ammo="Aurgelmir Orb +1",
+        ammo="Hasty Pinion +1",
         head="Flam. Zucchetto +2",
-        -- body="Vishap Mail +3",
-        hands="Sulev. Gauntlets +2", -- Changed from Vis. Fng. Gaunt. +3
-        legs="Sulev. Cuisses +2", -- Changed from Ptero. Brais +3
-        feet="Flam. Gambieras +2", -- Changed from Ostro Greaves
-        neck="Dgn. Collar +1", -- Changed from Anu Torque
-        -- ear1="Sherida Earring",
-        ear2="Brutal Earring", -- Changed from Telos Earring
-        ring1="Chirich Ring", -- Changed from Chirich Ring +1
-        -- ring2="Niqmaddu Ring",
-        back=gear.DRG_JMP_Cape,
-        waist="Ioskeha Belt", -- Changed from Ioskeha Belt +1
+        hands="Sulev. Gauntlets +2",
+        legs="Sulev. Cuisses +2",
+        feet="Flam. Gambieras +2",
+        neck="Dgn. Collar +1",
+        ear1="Brutal Earring",
+        ear2="Cessance Earring",
+        ring1="Chirich Ring",
+        ring2="Moonbeam Ring",
+        back={ name="Brigantia's Mantle", augments={'STR+20','Accuracy+20 Attack+20','"Dbl.Atk."+10','Damage taken-5%',}},
+        waist="Ioskeha Belt",
     }
 
     sets.precast.JA['High Jump'] = sets.precast.JA['Jump']
     sets.precast.JA['Spirit Jump'] = sets.precast.JA['Jump']
     sets.precast.JA['Soul Jump'] = set_combine(sets.precast.JA['Jump'], {
-        -- body="Vishap Mail +3",
-        -- hands="Emi. Gauntlets +1",
-        legs=gear.Valo_STP_legs
+        legs="Sulev. Cuisses +2"
     })
     sets.precast.JA['Super Jump'] = {}
 
-    sets.precast.JA['Angon'] = {ammo="Angon", hands="Ptero. Fin. G. +3"}
+    sets.precast.JA['Angon'] = {
+        ammo="Angon", 
+        -- hands="Ptero. Fin. G. +3"
+    }
 
     -- Fast cast sets for spells
     sets.precast.FC = {
         ammo="Sapience Orb", --2
-        head="Carmine Mask +1", --14
-        body="Sacro Breastplate", --10
-        hands="Leyline Gloves", --8
+        --head="Carmine Mask +1", --14
+        --body="Sacro Breastplate", --10
+        --hands="Leyline Gloves", --8
         legs="Aya. Cosciales +2", --6
-        feet="Carmine Greaves +1", --8
-        neck="Orunmila's Torque", --5
+        -- feet="Carmine Greaves +1", --8
+        --neck="Orunmila's Torque", --5
         ear1="Loquacious Earring", --2
-        ear2="Enchntr. Earring +1", --2
-        ring2="Weather. Ring +1", --6(4)
-        }
+        -- ear2="Enchntr. Earring +1", --2
+        -- ring2="Weather. Ring +1", --6(4)
+    }
 
     ------------------------------------------------------------------------------------------------
     ------------------------------------- Weapon Skill Sets ----------------------------------------
     ------------------------------------------------------------------------------------------------
 
     sets.precast.WS = {
-        -- ammo="Knobkierrie",
-        head=gear.Valo_WSD_head,
-        body=gear.Valo_WSD_body,
-        -- hands="Ptero. Fin. G. +3",
-        legs="Sulev. Cuisses +2", -- Changed from Vishap Brais +3
+        head="Flam. Zucchetto +2",
+        body="Flamma Korazin +2",
+        hands="Sulev. Gauntlets +2",
+        legs="Sulev. Cuisses +2",
         feet="Sulev. Leggings +2",
         neck="Fotia Gorget",
-        -- ear1="Sherida Earring",
-        ear2="Moonshade Earring",
-        -- ring1="Regal Ring",
-        -- ring2="Niqmaddu Ring",
-        back=gear.DRG_WS2_Cape,
+        ear1="Moonshade Earring",
+        ear2="Mache Earring",
+        back={ name="Brigantia's Mantle", augments={'STR+20','Accuracy+20 Attack+20','"Dbl.Atk."+10','Damage taken-5%',}},
         waist="Fotia Belt",
     }
 
@@ -240,7 +263,7 @@ function init_gear_sets()
 
     sets.precast.WS['Camlann\'s Torment'] = set_combine(sets.precast.WS, {
         neck="Dgn. Collar +1",
-        waist="Sailfi Belt +1",
+        waist="Ioskeha Belt",
     })
 
     sets.precast.WS['Camlann\'s Torment'].Acc = set_combine(sets.precast.WS['Camlann\'s Torment'], {})
@@ -255,23 +278,18 @@ function init_gear_sets()
         waist="Ioskeha Belt",
         })
 
-    sets.precast.WS['Drakesbane'].Acc = set_combine(sets.precast.WS['Drakesbane'], {
-        waist="Ioskeha Belt +1",
-        })
-
     sets.precast.WS['Geirskogul'] = set_combine(sets.precast.WS, {
         ear2="Mache Earring",
-        back=gear.DRG_WS3_Cape,
+        back={ name="Brigantia's Mantle", augments={'STR+20','Accuracy+20 Attack+20','"Dbl.Atk."+10','Damage taken-5%',}},
     })
 
     sets.precast.WS['Geirskogul'].Acc = set_combine(sets.precast.WS['Geirskogul'], {})
 
     sets.precast.WS['Impulse Drive'] = set_combine(sets.precast.WS['Camlann\'s Torment'], {
-        hands="Flamma Manopolas +2",
         neck="Dgn. Collar +1",
         ear2="Moonshade Earring",
-        back=gear.DRG_WS4_Cape,
-        waist="Sailfi Belt +1",
+        back={ name="Brigantia's Mantle", augments={'STR+20','Accuracy+20 Attack+20','"Dbl.Atk."+10','Damage taken-5%',}},
+        waist="Ioskeha Belt",
     })
 
     sets.precast.WS['Impulse Drive'].Acc = set_combine(sets.precast.WS['Impulse Drive'], {
@@ -279,14 +297,10 @@ function init_gear_sets()
     })
 
     sets.precast.WS['Impulse Drive'].HighTP = set_combine(sets.precast.WS['Impulse Drive'], {
-        head=gear.Valo_WSD_head,
-        body=gear.Valo_WSD_body,
-        hands="Ptero. Fin. G. +3",
-        legs="Vishap Brais +3",
-        back=gear.DRG_WS2_Cape,
-        ear2="Ishvara Earring",
-        ring1="Regal Ring",
-        })
+        head="Flam. Zucchetto +2",
+        body="Flamma Korazin +2",
+        --ear2="Ishvara Earring",
+    })
 
     sets.precast.WS['Sonic Thrust'] = sets.precast.WS['Camlann\'s Torment']
     sets.precast.WS['Sonic Thrust'].Acc = sets.precast.WS['Camlann\'s Torment'].Acc
@@ -300,30 +314,27 @@ function init_gear_sets()
     })
 
     sets.precast.WS['Stardiver'].Acc = set_combine(sets.precast.WS['Stardiver'], {
-        head="Ptero. Armet +3",
-        feet="Ptero. Greaves +3",
-        })
+        -- head="Ptero. Armet +3",
+        -- feet="Ptero. Greaves +3",
+    })
 
     sets.precast.WS['Raiden Thrust'] = set_combine(sets.precast.WS, {
-        ammo="Ghastly Tathlum +1",
-        body="Carm. Sc. Mail +1",
-        hands="Carmine Fin. Ga. +1",
-        ear1="Crematio Earring",
+        -- ammo="Ghastly Tathlum +1",
+        --body="Carm. Sc. Mail +1",
+        --hands="Carmine Fin. Ga. +1",
+        --ear1="Crematio Earring",
         ear2="Friomisi Earring",
-        ring1="Shiva Ring +1",
-        back="Argocham. Mantle",
-        })
+        -- ring1="Shiva Ring +1",
+        -- back="Argocham. Mantle",
+    })
 
     sets.precast.WS['Thunder Thrust'] = sets.precast.WS['Raiden Thrust']
 
     sets.precast.WS['Leg Sweep'] = set_combine(sets.precast.WS, {
         body="Flamma Korazin +2",
-        hands="Flam. Manopolas +2",
         feet="Flam. Gambieras +2",
         ear1="Cessance Earring",
     })
-
-    sets.WSDayBonus = {head="Gavialis Helm"}
 
     ------------------------------------------------------------------------------------------------
     ---------------------------------------- Midcast Sets ------------------------------------------
@@ -354,7 +365,7 @@ function init_gear_sets()
         legs="Sulev. Cuisses +2",
         feet="Flam. Gambieras +2",
         neck="Dgn. Collar +1",
-        waist="Sailfi Belt +1",
+        waist="Ioskeha Belt",
         left_ear="Brutal Earring",
         right_ear="Cessance Earring",
         left_ring="Chirich Ring",
@@ -362,48 +373,36 @@ function init_gear_sets()
         back={ name="Brigantia's Mantle", augments={'STR+20','Accuracy+20 Attack+20','"Dbl.Atk."+10','Damage taken-5%',}},
         }
 
-    sets.idle.DT = set_combine(sets.idle, {
-        ammo="Staunch Tathlum",
-        head="Sulevia's Mask +2",
-        body="Sulevia's Plate. +2",
-        hands="Sulev. Gauntlets +2",
-        legs="Sulev. Cuisses +2",
+    sets.idle.DT = {
+        ammo="Staunch Tathlum", -- Good
+        head="Sulevia's Mask +2", -- Good
+        body="Sulevia's Plate. +2", -- Good
+        hands="Sulev. Gauntlets +2", -- Good
+        legs="Sulev. Cuisses +2", -- Good
         feet="Flam. Gambieras +2",
         neck="Dgn. Collar +1",
-        waist="Sailfi Belt +1",
         left_ear="Cessance Earring",
-        right_ear={ name="Odnowa Earring +1", augments={'Path: A',}},
-        left_ring="Vocane Ring",
-        right_ring="Moonbeam Ring",
+        right_ear={ name="Odnowa Earring +1", augments={'Path: A',}}, -- Good
+        left_ring="Vocane Ring", -- Good
+        right_ring="Moonbeam Ring", -- Good
         back={ name="Brigantia's Mantle", augments={'STR+20','Accuracy+20 Attack+20','"Dbl.Atk."+10','Damage taken-5%',}},
-        })
+    }
 
     sets.idle.Pet = set_combine(sets.idle, {
-        body="Vishap Mail +3",
-        hands="Ptero. Fin. G. +3",
-        feet="Ptero. Greaves +3",
+        -- body="Vishap Mail +3",
+        -- hands="Ptero. Fin. G. +3",
+        -- feet="Ptero. Greaves +3",
         neck="Dgn. Collar +1",
-        ear1="Enmerkar Earring",
-        ear2="Anastasi Earring",
+        -- ear1="Enmerkar Earring",
+        -- ear2="Anastasi Earring",
         waist="Ioskeha Belt",
-        })
-
-    sets.idle.DT.Pet = set_combine(sets.idle.Pet, {
-        head="Hjarrandi Helm", --10/10
-        body="Emicho Haubert +1",
-        legs="Ptero. Brais +3",
-        neck="Dgn. Collar +1",
-        ring1="Moonlight Ring", --5/5
-        ring2="Defending Ring", --10/10
-        back="Moonlight Cape", --6/6
-        })
+    })
 
     sets.idle.Town = set_combine(sets.idle, {
   
         })
 
     sets.idle.Weak = sets.idle.DT
-    sets.Kiting = {legs="Carmine Cuisses +1"}
 
 
     ------------------------------------------------------------------------------------------------
@@ -427,36 +426,30 @@ function init_gear_sets()
         legs="Sulev. Cuisses +2",
         feet="Flam. Gambieras +2",
         neck="Dgn. Collar +1",
-        waist="Sailfi Belt +1",
+        waist="Ioskeha Belt",
         left_ear="Brutal Earring",
         right_ear="Cessance Earring",
         left_ring="Chirich Ring",
         right_ring="Moonbeam Ring",
         back={ name="Brigantia's Mantle", augments={'STR+20','Accuracy+20 Attack+20','"Dbl.Atk."+10','Damage taken-5%',}},
-        }
+    }
 
-    sets.engaged.LowAcc = set_combine(sets.engaged, {
+    sets.engaged.Acc = set_combine(sets.engaged, {
+        ear2="Mache Earring",
         waist="Ioskeha Belt",
-        })
-
-    sets.engaged.MidAcc = set_combine(sets.engaged.LowAcc, {
-        ear2="Mache Earring",
-        })
-
-    sets.engaged.HighAcc = set_combine(sets.engaged.MidAcc, {
-        legs=gear.Valo_STP_legs,
-        })
-
-    sets.engaged.MaxAcc = set_combine(sets.engaged.HighAcc, {
-        ear2="Mache Earring",
-        })
-
-    sets.engaged.STP = set_combine(sets.engaged, {
-        legs=gear.Valo_STP_legs,
-        ear2="Telos Earring",
-        back=gear.DRG_JMP_Cape,
+        legs="Sulev. Cuisses +2",
     })
 
+    sets.engaged.STP = set_combine(sets.engaged, {
+        legs="Sulev. Cuisses +2",
+        ear2="Cessance Earring",
+        back={ name="Brigantia's Mantle", augments={'STR+20','Accuracy+20 Attack+20','"Dbl.Atk."+10','Damage taken-5%',}},
+    })
+
+    -- Update the hybrid sets to match
+    sets.engaged.DT = set_combine(sets.engaged, sets.engaged.Hybrid)
+    sets.engaged.Acc.DT = set_combine(sets.engaged.Acc, sets.engaged.Hybrid)
+    sets.engaged.STP.DT = set_combine(sets.engaged.STP, sets.engaged.Hybrid)
 
     ------------------------------------------------------------------------------------------------
     ---------------------------------------- Hybrid Sets -------------------------------------------
@@ -467,25 +460,21 @@ function init_gear_sets()
         ring2="Moonbeam Ring",
         }
 
-    sets.engaged.DT = set_combine(sets.engaged, sets.engaged.Hybrid)
-    sets.engaged.LowAcc.DT = set_combine(sets.engaged.LowAcc, sets.engaged.Hybrid)
-    sets.engaged.MidAcc.DT = set_combine(sets.engaged.MidAcc, sets.engaged.Hybrid)
-    sets.engaged.HighAcc.DT = set_combine(sets.engaged.HighAcc, sets.engaged.Hybrid)
-    sets.engaged.STP.DT = set_combine(sets.engaged.STP, sets.engaged.Hybrid)
-
     ------------------------------------------------------------------------------------------------
     ---------------------------------------- Special Sets ------------------------------------------
     ------------------------------------------------------------------------------------------------
 
     sets.buff.Doom = {
-        --neck="Nicander's Necklace", --20
-        --ring1={name="Eshmun's Ring", bag="wardrobe3"}, --20
-        --ring2={name="Eshmun's Ring", bag="wardrobe4"}, --20
-        --waist="Gishdubar Sash", --10
+        -- neck="Nicander's Necklace", --20
+        -- ring1={name="Eshmun's Ring", bag="wardrobe3"}, --20
+        -- ring2={name="Eshmun's Ring", bag="wardrobe4"}, --20
+        -- waist="Gishdubar Sash", --10
         }
 
-    -- sets.CP = {back="Mecisto. Mantle"}
-    --sets.Reive = {neck="Ygnas's Resolve +1"}
+    -- Add TH set
+    sets.TreasureHunter = set_combine(sets.engaged, {
+        ammo="Per. Lucky Egg",
+    })
 
 end
 
@@ -515,11 +504,7 @@ end
 
 function job_post_precast(spell, action, spellMap, eventArgs)
     if spell.type == 'WeaponSkill' then
-        if spell.english == 'Stardiver' and state.WeaponskillMode.current == 'Normal' then
-            if world.day_element == 'Earth' or world.day_element == 'Light' or world.day_element == 'Dark' then
-                equip(sets.WSDayBonus)
-           end
-        elseif spell.english == 'Impulse Drive' and player.tp > 2000 then
+        if spell.english == 'Impulse Drive' and player.tp > 2000 then
            equip(sets.precast.WS['Impulse Drive'].HighTP)
         end
     end
@@ -559,7 +544,7 @@ function job_buff_change(buff,gain)
         end
     end
 
-    if buff == 'Hasso' and not gain then
+    if buff == 'Hasso' and not gain and player.sub_job == 'SAM' and not areas.Cities:contains(world.area) then
         add_to_chat(167, 'Recasting Hasso!')
         send_command('input /ja "' .. buff .. '" <me>')
     end
@@ -571,9 +556,22 @@ end
 -- User code that supplements standard library decisions.
 -------------------------------------------------------------------------------------------------------------------
 
-function job_handle_equipping_gear(playerStatus, eventArgs)
-    check_gear()
-    check_moving()
+-- Handle equipping gear when engaging
+function job_status_change(newStatus, oldStatus, eventArgs)
+    if newStatus == 'Engaged' then
+        -- Check for Hasso when engaging in combat
+        if player.sub_job == 'SAM' and not buffactive['Hasso'] then
+            send_command('wait 1; input /ja "Hasso" <me>')
+        end
+    end
+end
+
+-- This handles the actual gear swaps
+function customize_melee_set(meleeSet)
+    if state.TreasureMode.value == 'Tag' and not info.tagged_mobs[player.target.id] then
+        meleeSet = set_combine(meleeSet, sets.TreasureHunter)
+    end
+    return meleeSet
 end
 
 function job_update(cmdParams, eventArgs)
@@ -587,21 +585,6 @@ function get_custom_wsmode(spell, action, spellMap)
     end
 
     return wsmode
-end
-
--- Modify the default idle set after it was constructed.
-function customize_idle_set(idleSet)
-    -- if state.CP.current == 'on' then
-    --     equip(sets.CP)
-    --     disable('back')
-    -- else
-    --     enable('back')
-    -- end
-    if state.Auto_Kite.value == true then
-       idleSet = set_combine(idleSet, sets.Kiting)
-    end
-
-    return idleSet
 end
 
 -- Function to display the current relevant user state when doing an update.
@@ -629,10 +612,7 @@ function display_current_job_state(eventArgs)
     local i_msg = state.IdleMode.value
 
     local msg = ''
-    if state.Kiting.value then
-        msg = msg .. ' Kiting: On |'
-    end
-
+    
     add_to_chat(002, '| ' ..string.char(31,210).. 'Melee' ..cf_msg.. ': ' ..string.char(31,001)..m_msg.. string.char(31,002)..  ' |'
         ..string.char(31,207).. ' WS' ..am_msg.. ': ' ..string.char(31,001)..ws_msg.. string.char(31,002)..  ' |'
         ..string.char(31,004).. ' Defense: ' ..string.char(31,001)..d_msg.. string.char(31,002)..  ' |'
@@ -647,7 +627,15 @@ end
 -------------------------------------------------------------------------------------------------------------------
 
 function job_self_command(cmdParams, eventArgs)
-    gearinfo(cmdParams, eventArgs)
+    if cmdParams[1]:lower() == 'auto_hasso' then
+        auto_hasso()
+    end
+end
+
+function auto_hasso()   
+    if player.status == 'Engaged' and player.sub_job == 'SAM' and not buffactive['Hasso'] and not midaction() and not areas.Cities:contains(world.area) then
+        send_command('input /ja "Hasso" <me>')
+    end
 end
 
 function gearinfo(cmdParams, eventArgs)
@@ -661,16 +649,6 @@ function gearinfo(cmdParams, eventArgs)
         end
         if not midaction() then
             job_update()
-        end
-    end
-end
-
-function check_moving()
-    if state.DefenseMode.value == 'None'  and state.Kiting.value == false then
-        if state.Auto_Kite.value == false and moving then
-            state.Auto_Kite:set(true)
-        elseif state.Auto_Kite.value == true and moving == false then
-            state.Auto_Kite:set(false)
         end
     end
 end
@@ -713,4 +691,11 @@ end
 
 function set_lockstyle()
     send_command('wait 2; input /lockstyleset ' .. lockstyleset)
+end
+
+function status_change(new, old)
+    -- Check for Hasso when engaging in combat (only outside of towns)
+    if new == 'Engaged' and player.sub_job == 'SAM' and not buffactive['Hasso'] and not areas.Cities:contains(world.area) then
+        send_command('wait 1; input /ja "Hasso" <me>')
+    end
 end

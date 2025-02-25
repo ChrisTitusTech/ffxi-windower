@@ -3,6 +3,7 @@
     Author: Ragnarok.Lorand
 --]]
 
+local global = gearswap and gearswap._G or _G
 local lor_chat = {}
 lor_chat._author = 'Ragnarok.Lorand'
 lor_chat._version = '2016.09.10.0'
@@ -12,7 +13,7 @@ _libs.req('maths', 'strings', 'tables')
 _libs.lor.req('functional', 'strings', 'tables')
 _libs.lor.chat = lor_chat
 
-local mprefix = _libs.lor.include_addon_name and '[%s]':format(_addon.name) or ''
+local mprefix = _libs.lor.include_addon_name and ('[%s]'):format(_addon.name) or ''
 
 
 function atc(...)
@@ -22,9 +23,9 @@ function atc(...)
         c = args[1]
         args = args:slice(2)
     end
-    --local msg = lor.G.windower.to_shift_jis(" ":join(args))
-    local msg = ' ':join(args)
-    lor.G.windower.add_to_chat(c, mprefix..msg)
+    --local msg = global.windower.to_shift_jis(" ":join(args))
+    local msg = (' '):join(args)
+    global.windower.add_to_chat(c, mprefix..msg)
 end
 
 
@@ -35,14 +36,9 @@ function atcc(...)
         c = args[1]
         args = args:slice(2)
     end
-    --local msg = lor.G.windower.to_shift_jis(" ":join(args))
-    local msg = ' ':join(args)
-    lor.G.windower.add_to_chat(0, mprefix..msg:colorize(c))
-end
-
-
-function atcs(msg)
-    lor.G.windower.add_to_chat(0, windower.to_shift_jis(tostring(mprefix..msg)))
+    --local msg = global.windower.to_shift_jis(" ":join(args))
+    local msg = (' '):join(args)
+    global.windower.add_to_chat(0, mprefix..msg:colorize(c))
 end
 
 
@@ -72,10 +68,10 @@ function atcf(...)
         msg = tostring(args[1])
     else
         msg = args[1]:format(unpack(args:slice(2)))
-        --lor.G.windower.add_to_chat(c, string.format(args[1], unpack(args:slice(2))))
+        --global.windower.add_to_chat(c, string.format(args[1], unpack(args:slice(2))))
     end
-    --lor.G.windower.add_to_chat(c, lor.G.windower.to_shift_jis(mprefix..msg))
-    lor.G.windower.add_to_chat(c, mprefix..msg)
+    --global.windower.add_to_chat(c, global.windower.to_shift_jis(mprefix..msg))
+    global.windower.add_to_chat(c, mprefix..msg)
 end
 
 
@@ -95,11 +91,11 @@ function atcfs(...)
     if #args < 2 then
         msg = tostring(args[1])
     else
-        --lor.G.windower.add_to_chat(c, string.format(args[1], unpack(map(tostring, args:slice(2)))))
+        --global.windower.add_to_chat(c, string.format(args[1], unpack(map(tostring, args:slice(2)))))
         msg = args[1]:format(unpack(map(tostring, args:slice(2))))
     end
-    --lor.G.windower.add_to_chat(c, lor.G.windower.to_shift_jis(mprefix..msg))
-    lor.G.windower.add_to_chat(c, mprefix..msg)
+    --global.windower.add_to_chat(c, global.windower.to_shift_jis(mprefix..msg))
+    global.windower.add_to_chat(c, mprefix..msg)
 end
 
 
@@ -119,10 +115,10 @@ function atcns(...)
     if #args < 2 then
         msg = tostring(args[1])
     else
-        --lor.G.windower.add_to_chat(c, string.format(args[1], unpack(map(tostring, args:slice(2)))))
+        --global.windower.add_to_chat(c, string.format(args[1], unpack(map(tostring, args:slice(2)))))
         msg = args[1]:format(unpack(map(tostring, args:slice(2))))
     end
-    lor.G.windower.add_to_chat(c, mprefix..msg)
+    global.windower.add_to_chat(c, mprefix..msg)
 end
 
 
@@ -132,13 +128,13 @@ function echo(msg)
         if _addon and _addon.name then
             prefix = '['.._addon.name..']'
         end
-        windower.send_command('echo %s%s':format(prefix, msg))
+        windower.send_command(('echo %s%s'):format(prefix, msg))
     end
 end
 
 
 local function fmt_output(s, w)
-    local sp = ' ':rep(w - tostring(s):wlen())
+    local sp = (' '):rep(w - tostring(s):wlen())
     return s..sp
 end
 
@@ -152,7 +148,7 @@ end
 
 
 function col_pad(s, px_width)
-    local sp = ' ':rep(math.floor(((px_width - tostring(s):px_len()) / 7.0) + 0.5))
+    local sp = (' '):rep(math.floor(((px_width - tostring(s):px_len()) / 7.0) + 0.5))
     return s..sp
 end
 
@@ -203,7 +199,7 @@ end
 
 
 local function print_indented_array(arr, indent)
-    indent = (type(indent) == 'string') and indent or ' ':rep(indent)
+    indent = (type(indent) == 'string') and indent or (' '):rep(indent)
     --local indented = {}
     local tbl = table.copy(arr)
     table.sort(tbl)
@@ -228,7 +224,7 @@ function pprint_tiered(obj, header, lead_width, depth)
     if header ~= nil then
         atc(2, header)
     end
-    if lor.G.rawequal(obj, _G) then
+    if global.rawequal(obj, _G) then
         _pprint(obj)
         return
     end
@@ -236,59 +232,59 @@ function pprint_tiered(obj, header, lead_width, depth)
     local default_depth = 3
     depth = depth and (depth - 1) or default_depth
     lead_width = lead_width and (lead_width + 6) or 0
-    local indent = ' ':rep(lead_width)
+    local indent = (' '):rep(lead_width)
     if obj ~= nil then
         if type(obj) == 'table' then
             local lwkl = max(unpack(map(string.wlen, table.keys(obj))))
             local fmt = indent..'%s :  %s'
             for k,v in opairs(obj) do
-                if not lor.G.rawequal(obj, v) then   --Skip _G._G
+                if not global.rawequal(obj, v) then   --Skip _G._G
                     local fk = fmt_output(k, lwkl)
                     if type(v) == 'table' then
                         if depth > 1 then
                             if table.has_nested(v) then
                                 local k1,v1 = table.first_pair(v)
                                 if (sizeof(v) == 1) and (type(v1) == 'table') and (sizeof(v1) == 0) then
-                                    atcfs(0, fmt, fk, '{%s}':format(', ':join(table.kv_strings(v))))
+                                    atcfs(0, fmt, fk, ('{%s}'):format((', '):join(table.kv_strings(v))))
                                 else
                                     atcfs(0, fmt, fk, '{')
                                     pprint_tiered(v, nil, lead_width + lwkl, depth)
-                                    atc(0, indent, ' ':rep(lwkl-1), '}')
+                                    atc(0, indent, (' '):rep(lwkl-1), '}')
                                 end
                             elseif table.is_array(v) then
-                                local arrstr = '{%s}':format(', ':join(v))
+                                local arrstr = ('{%s}'):format((', '):join(v))
                                 arrstr = fmt:format(fk, arrstr)
                                 if arrstr:wlen() > 190 then
                                     atcfs(0, fmt, fk, '{')
                                     print_indented_array(v, lead_width + lwkl)
-                                    atc(0, indent, ' ':rep(lwkl-1), '}')
+                                    atc(0, indent, (' '):rep(lwkl-1), '}')
                                 else
                                     atc(0, arrstr)
                                 end
                             else
-                                local kvstr = '{%s}':format(', ':join(table.kv_strings(v)))
+                                local kvstr = ('{%s}'):format((', '):join(table.kv_strings(v)))
                                 kvstr = fmt:format(fk, kvstr)
                                 if kvstr:wlen() > 190 then
                                     atcfs(0, fmt, fk, '{')
                                     pprint_tiered(v, nil, lead_width + lwkl, depth)
-                                    atc(0, indent, ' ':rep(lwkl-1), '}')
+                                    atc(0, indent, (' '):rep(lwkl-1), '}')
                                 else
                                     atc(0, kvstr)
                                 end
                             end
                         else
                             if table.is_array(v) then
-                                local arrstr = '{%s}':format(', ':join(v))
+                                local arrstr = ('{%s}'):format((', '):join(v))
                                 arrstr = fmt:format(fk, arrstr)
                                 if arrstr:wlen() > 190 then
                                     atcfs(0, fmt, fk, '{')
                                     print_indented_array(v, lead_width + lwkl)
-                                    atc(0, indent, ' ':rep(lwkl-1), '}')
+                                    atc(0, indent, (' '):rep(lwkl-1), '}')
                                 else
                                     atc(0, arrstr)
                                 end
                             else
-                                local kvstr = '{%s}':format(', ':join(table.kv_strings(v)))
+                                local kvstr = ('{%s}'):format((', '):join(table.kv_strings(v)))
                                 kvstr = fmt:format(fk, kvstr)
                                 if kvstr:wlen() > 190 then
                                     atcfs(0, fmt, fk, v)

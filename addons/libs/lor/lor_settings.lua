@@ -1,36 +1,33 @@
 --[[
-    Settings library that saves settings as a lua file instead of XML.  The
-    config library is too inflexible for storing k,v pairs when keys contain
-    invalid xml tags, and XML is very verbose.  This was easier than finding or
-    writing a JSON writer since the included JSON library is for reading only.
+    Settings library that saves settings as a lua file instead of XML.  The config library is too inflexible for storing
+    k,v pairs when keys contain invalid xml tags, and XML is very verbose.  This was easier than finding or writing a
+    JSON writer since the included JSON library is for reading only.
     
     Any valid lua can be loaded by this library.
     
-    The table (and any sub-tables) shouldn't contain any values with types that
-    are not one of table, string, number, boolean, nil.  When preparing to save,
-    for any other type, the tostring() function will be called, and they will be
+    The table (and any sub-tables) shouldn't contain any values with types that are not one of table, string, number,
+    boolean, nil.  When preparing to save, for any other type, the tostring() function will be called, and they will be
     treated as strings.
     
-    The top-level table is treated / saved as a default table with no custom
-    class.  When loaded, the top-level table will have the same metatable as the
-    given defaults table if provided / it has one, otherwise it will be a T
-    table.  Additional settings-related methods will be included as well to
-    provide settings_tbl:save() functionality, for example.
+    The top-level table is treated / saved as a default table with no custom class.  When loaded, the top-level table
+    will have the same metatable as the given defaults table if provided / it has one, otherwise it will be a T table.
+    Additional settings-related methods will be included as well to provide settings_tbl:save() functionality, for
+    example.
     
-    Preserves the class of sub-tables if their class is included in the
-    valid_classes variable below, which for now contains List, Set, and Table.
-    Any sub-tables with a different class will be treated like a default table.
+    Preserves the class of sub-tables if their class is included in the valid_classes variable below, which for now
+    contains List, Set, and Table.  Any sub-tables with a different class will be treated like a default table.
     
     Author: Ragnarok.Lorand
 --]]
 
+local global = gearswap and gearswap._G or _G
 local lor_settings = {}
 lor_settings._author = 'Ragnarok.Lorand'
-lor_settings._version = '2016.10.23.1'
+lor_settings._version = '2018.05.20.0'
 
 require('lor/lor_utils')
 _libs.lor.settings = lor_settings
-_libs.lor.req('chat', 'tables', {n='strings',v='2016.08.07'})
+_libs.lor.req('chat', 'tables', 'strings')
 _libs.req('tables', 'sets')
 local files = require('files')
 
@@ -68,7 +65,7 @@ function lor_settings.convert_config(original_path, new_path)
     local suffix = ''
     local backup_path = filepath
     while windower.file_exists(backup_path) do
-        backup_path = '%s.backup%s':format(filepath, suffix)
+        backup_path = ('%s.backup%s'):format(filepath, suffix)
         suffix = (suffix == '') and 0 or (suffix + 1)
     end
     
@@ -102,7 +99,7 @@ function lor_settings.load(filepath, defaults)
     local fcontents = files.read(filepath)
     if (fcontents ~= nil) then
         loaded = loadstring(fcontents)
-        lor.G.setfenv(loaded, _G)       --Allows loading of S{}, T{}, etc.
+        global.setfenv(loaded, _G)       --Allows loading of S{}, T{}, etc.
         loaded = loaded()
     end
     
@@ -179,19 +176,19 @@ local function prepare(t, indent)
             if not no_quote_types:contains(type(_k)) then
                 k = k:enquote()
             end
-            k = '[%s] = ':format(k)
+            k = ('[%s] = '):format(k)
         end
         
         if type(v) == 'table' then
             local class_prefix = t_prefix(v)
             local sub_table = prepare(v, indent)
             if #sub_table < 1 then
-                res[#res+1] = '%s%s{}':format(k, class_prefix)
+                res[#res+1] = ('%s%s{}'):format(k, class_prefix)
             else
                 --Encorporate the subtable into the result, adding a level of indentation
-                res[#res+1] = '%s%s{':format(k, class_prefix)
+                res[#res+1] = ('%s%s{'):format(k, class_prefix)
                 for _,line in pair_fn(sub_table) do
-                    res[#res+1] = '%s%s':format(indent, line)
+                    res[#res+1] = ('%s%s'):format(indent, line)
                 end
                 res[#res+1] = '}'
             end
@@ -200,7 +197,7 @@ local function prepare(t, indent)
             if not no_quote_types:contains(type(v)) then
                 val = val:enquote()
             end
-            res[#res+1] = '%s%s':format(k, val)
+            res[#res+1] = ('%s%s'):format(k, val)
         end
         
         if i < tlen then
@@ -218,7 +215,7 @@ end
     line_end: (optional) newline character for each line (default: \n)
 --]]
 function lor_settings.save(settings_tbl, quiet, indent, line_end)
-    indent = (type(indent) == 'number') and ' ':rep(indent) or indent
+    indent = (type(indent) == 'number') and (' '):rep(indent) or indent
     indent = (type(indent) == 'string') and indent or '    '
     line_end = (type(line_end) == 'string') and line_end or '\n'
     

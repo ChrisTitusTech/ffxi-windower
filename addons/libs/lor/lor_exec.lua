@@ -1,9 +1,9 @@
 --[[
-    Functions for executing semi-arbitrary code from the chat window.  Formerly
-    part of info/info_share.lua
+    Functions for executing semi-arbitrary code from the chat window.  Formerly part of info/info_share.lua
     Author: Ragnarok.Lorand
 --]]
 
+local global = gearswap and gearswap._G or _G
 local lor_exec = {}
 lor_exec._author = 'Ragnarok.Lorand'
 lor_exec._version = '2016.10.23'
@@ -22,7 +22,7 @@ _libs.lor.exec = lor_exec
 local function parse_for_info(command)
     local toload = command:startswith('return ') and command or 'return '..command
     local loaded = loadstring(toload)
-    lor.G.setfenv(loaded, _G)
+    global.setfenv(loaded, _G)
     return loaded()
 end
 
@@ -40,7 +40,7 @@ function lor_exec.process_input(command, args)
                 return
             end
             local results = parsed:with(field, val)
-            local msg = '%s:with(%s,%s)':format(target, field, val)
+            local msg = ('%s:with(%s,%s)'):format(target, field, val)
             if (results ~= nil) then
                 pprint(parsed:with(field, val), msg)
             else
@@ -51,7 +51,7 @@ function lor_exec.process_input(command, args)
         end
     elseif cmd == 'learned' then
         local wf_spells = windower.ffxi.get_spells()
-        local spell_name = ' ':join(args):lower()
+        local spell_name = (' '):join(args):lower()
         for id,spell in pairs(res.spells) do
             if spell.en:lower() == spell_name then
                 atcfs('%s: %s', spell.en, wf_spells[id])
@@ -63,7 +63,7 @@ function lor_exec.process_input(command, args)
         atc(0, 'spell_id,spell_name,element,skill')
         for k,v in pairs(res.spells) do
             if v.type == stype then
-                atc(',':join(v.id, v.en, v.element, v.skill))
+                atc((','):join(v.id, v.en, v.element, v.skill))
             end
         end
     elseif cmd == 'colortest' then
@@ -78,18 +78,18 @@ function lor_exec.process_input(command, args)
                 for i = 0, 9 do
                     local n = (c * 10) + i
                     if (n ~= 253) then
-                        colors[#colors+1] = '%03d':format(n):colorize(n)
+                        colors[#colors+1] = ('%03d'):format(n):colorize(n)
                     end
                 end
             end
         end
         
         for i = 1, #colors, 15 do
-            atc(' ':join(table.slice(colors, i, i + 15)))
+            atc((' '):join(table.slice(colors, i, i + 15)))
         end
     else
         if (args ~= nil) and (sizeof(args) > 0) then
-            command = ' ':join(command, args)
+            command = (' '):join(command, args)
             atc(command)
         end
         local parsed = parse_for_info(command)
@@ -97,7 +97,7 @@ function lor_exec.process_input(command, args)
         if parsed ~= nil then
             local msg = ':'
             if (type(parsed) == 'table') then
-                msg = ' (%s):':format(sizeof(parsed))
+                msg = (' (%s):'):format(sizeof(parsed))
             end
             pprint(parsed, command..msg)
         else

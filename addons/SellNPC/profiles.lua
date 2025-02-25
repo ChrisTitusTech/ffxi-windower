@@ -255,7 +255,11 @@ profiles['junk'] = S{
     'Shadow Geode',
     'Garudite',
     'Fenrite',
-    
+    'Doll Shard',
+    'Leviatite',
+	'Airlixir',
+	'Airlixir +1',
+	'Twinthread',
 }
 
 return profiles

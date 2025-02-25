@@ -5,7 +5,7 @@
 
 local lor_str = {}
 lor_str._author = 'Ragnarok.Lorand'
-lor_str._version = '2016.10.16'
+lor_str._version = '2018.05.26'
 
 require('lor/lor_utils')
 _libs.req('strings')
@@ -118,9 +118,8 @@ end
 function string.join(jstr, ...)
     --Somewhat equivalent to Python's str.join(iterable)
     local tbl = {...}
-    local building = ''
-    local i = 1
-    while i <= #tbl do
+    local building = {}
+    for i=1, #tbl do
         local ele = tbl[i]
         if type(ele) == 'table' then
             if class(ele) == 'Set' then
@@ -128,15 +127,14 @@ function string.join(jstr, ...)
                 for k,_ in pairs(ele) do
                     stbl[#stbl+1] = k
                 end
-                ele = string.join(jstr, unpack(stbl))
+                ele = jstr:join(unpack(stbl))
             else
-                ele = string.join(jstr, unpack(ele))
+                ele = jstr:join(unpack(ele))
             end
         end
-        building = building..((i == 1) and '' or jstr)..tostring(ele)
-        i = i + 1
+        building[i] = tostring(ele)
     end
-    return building
+    return table.concat(building, jstr)
 end
 
 
@@ -165,12 +163,48 @@ end
     contains both, then single quotes are escaped and used.
 --]]
 function string.enquote(s)
-    if s:match("'") == nil then
-        return "'%s'":format(s)
-    elseif s:match('"') == nil then
-        return '"%s"':format(s)
+    return ('%q'):format(s)
+--    if s:match("'") == nil then
+--        return ("'%s'"):format(s)
+--    elseif s:match('"') == nil then
+--        return ('"%s"'):format(s)
+--    end
+--    return ("'%s'"):format(s:gsub("'","\\'"))
+end
+
+--[[
+function string.startswith(s, ...)
+    -- Returns true if this string starts with one of the given strings, false otherwise
+    for _, val in pairs({...}) do
+        if s:find('^'..val) ~= nil then return true end
     end
-    return "'%s'":format(s:gsub("'","\\'"))
+    return false
+end
+
+function string.endswith(s, ...)
+    -- Returns true if this string ends with one of the given strings, false otherwise
+    for _, val in pairs({...}) do
+        if s:find(val..'$') ~= nil then return true end
+    end
+    return false
+end
+--]]
+
+local str_format = string.format
+function string.format(s, ...)
+    -- Fix lua's poor handling of nil values passed to string.format
+    local fmt_args = {}
+    local args = {...}
+    for i=1, #args do
+        local arg = args[i]
+        --print(str_format('[%s] (%s) %s', i, type(arg), tostring(arg)))
+        if type(arg) == 'table' then
+            fmt_args[i] = tostring(arg)
+        else
+            fmt_args[i] = arg or 'nil'
+        end
+    end
+    return str_format(s, unpack(fmt_args))
 end
 
 

@@ -3,20 +3,19 @@
     
     Any valid lua can be loaded by this library.
     
-    The table (and any sub-tables) shouldn't contain any values with types that
-    are not one of table, string, number, boolean, nil.  For any other type, the
-    tostring() function will be called, and they will be treated as strings.
+    The table (and any sub-tables) shouldn't contain any values with types that are not one of table, string, number,
+    boolean, nil.  For any other type, the tostring() function will be called, and they will be treated as strings.
     
     The top-level table is treated as a default table with no custom class.
     When decoded, the top-level table will be a T table.
     
-    Preserves the class of sub-tables if their class is included in the
-    valid_classes variable below, which for now contains List, Set, and Table.
-    Any sub-tables with a different class will be treated like a default table.
+    Preserves the class of sub-tables if their class is included in the valid_classes variable below, which for now
+    contains List, Set, and Table.  Any sub-tables with a different class will be treated like a default table.
     
     Author: Ragnarok.Lorand
 --]]
 
+local global = gearswap and gearswap._G or _G
 local lor_serialization = {}
 lor_serialization._author = 'Ragnarok.Lorand'
 lor_serialization._version = '2016.10.22.0'
@@ -45,7 +44,7 @@ function lor_serialization.decode(lua_str)
     
     local loaded = nil
     loaded = loadstring(lua_str)
-    lor.G.setfenv(loaded, _G)       --Allows loading of S{}, T{}, etc.
+    global.setfenv(loaded, _G)       --Allows loading of S{}, T{}, etc.
     loaded = loaded()
     
     if loaded == nil then
@@ -129,12 +128,12 @@ local function prepare_json(t, indent, collapse)
             local st_open, st_close, st_empty = json_wrappers(v)
             local sub_table = prepare_json(v, indent, collapse)
             if #sub_table < 1 then
-                res[#res+1] = '%s%s':format(k, st_empty)
+                res[#res+1] = ('%s%s'):format(k, st_empty)
             else
                 --Encorporate the subtable into the result, adding a level of indentation
-                res[#res+1] = '%s%s':format(k, st_open)
+                res[#res+1] = ('%s%s'):format(k, st_open)
                 for _,line in opairs(sub_table) do
-                    res[#res+1] = '%s%s':format(indent, line)
+                    res[#res+1] = ('%s%s'):format(indent, line)
                 end
                 res[#res+1] = st_close
             end
@@ -143,7 +142,7 @@ local function prepare_json(t, indent, collapse)
             if not no_quote_types:contains(type(v)) then
                 val = val:enquote()
             end
-            res[#res+1] = '%s%s':format(k, val)
+            res[#res+1] = ('%s%s'):format(k, val)
         end
         
         if i < tlen then
@@ -161,7 +160,7 @@ end
     line_end: (optional) newline character for each line (default: none)
 --]]
 function lor_serialization.json_dumps(obj, indent, line_end)
-    indent = (type(indent) == 'number') and ' ':rep(indent) or indent
+    indent = (type(indent) == 'number') and (' '):rep(indent) or indent
     indent = (type(indent) == 'string') and indent or ''
     line_end = (type(line_end) == 'string') and line_end or ''
     
@@ -178,11 +177,11 @@ function lor_serialization.json_dumps(obj, indent, line_end)
     end
     
     local obj_open, obj_close, obj_empty = json_wrappers(obj)
-    local json_str = '%s%s':format(obj_open, line_end)
+    local json_str = ('%s%s'):format(obj_open, line_end)
     for _,line in pairs(prepared) do
-        json_str = '%s%s%s%s':format(json_str, indent, line, line_end)
+        json_str = ('%s%s%s%s'):format(json_str, indent, line, line_end)
     end
-    return '%s%s%s':format(json_str, obj_close, line_end)
+    return ('%s%s%s'):format(json_str, obj_close, line_end)
 end
 
 
@@ -218,12 +217,12 @@ local function prepare(t, indent, collapse)
             local class_prefix = t_prefix(v)
             local sub_table = prepare(v, indent, collapse)
             if #sub_table < 1 then
-                res[#res+1] = '%s%s{}':format(k, class_prefix)
+                res[#res+1] = ('%s%s{}'):format(k, class_prefix)
             else
                 --Encorporate the subtable into the result, adding a level of indentation
-                res[#res+1] = '%s%s{':format(k, class_prefix)
+                res[#res+1] = ('%s%s{'):format(k, class_prefix)
                 for _,line in opairs(sub_table) do
-                    res[#res+1] = '%s%s':format(indent, line)
+                    res[#res+1] = ('%s%s'):format(indent, line)
                 end
                 res[#res+1] = '}'
             end
@@ -232,7 +231,7 @@ local function prepare(t, indent, collapse)
             if not no_quote_types:contains(type(v)) then
                 val = val:enquote()
             end
-            res[#res+1] = '%s%s':format(k, val)
+            res[#res+1] = ('%s%s'):format(k, val)
         end
         
         if i < tlen then
@@ -250,14 +249,14 @@ end
     line_end: (optional) newline character for each line (default: none)
 --]]
 function lor_serialization.encode(obj, indent, line_end)
-    indent = (type(indent) == 'number') and ' ':rep(indent) or indent
+    indent = (type(indent) == 'number') and (' '):rep(indent) or indent
     indent = (type(indent) == 'string') and indent or ''
     line_end = (type(line_end) == 'string') and line_end or ''
     
     if type(obj) == 'string' then
-        return 'return %s':format(obj:enquote())
+        return ('return %s'):format(obj:enquote())
     elseif no_quote_types:contains(type(obj)) then
-        return 'return %s':format(tostring(obj))
+        return ('return %s'):format(tostring(obj))
     end
     
     local prepared = prepare(obj, indent, true)

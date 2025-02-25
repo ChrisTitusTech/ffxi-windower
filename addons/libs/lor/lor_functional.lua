@@ -3,9 +3,10 @@
     Author: Ragnarok.Lorand
 --]]
 
+local global = gearswap and gearswap._G or _G
 local lor_func = {}
 lor_func._author = 'Ragnarok.Lorand'
-lor_func._version = '2016.07.30'
+lor_func._version = '2018.05.26'
 
 require('lor/lor_utils')
 _libs.req('functions')
@@ -41,14 +42,13 @@ lor.fn_tget = function(t) return function(k) return t[k] end end
 local trace = {}
 
 --[[
-    Returns a customized copy of the given function fn, such that future calls
-    of the returned function will always pass the given value val to fn in
-    position pos, along with any additional arguments provided.
-    Written based on the desire to emulate the 'if' portion of list/dict
-    comprehension in Python, such as in the following:
-    list = [val for key,val in dict.items() if key in equip_bags]
+    Returns a customized copy of the given function fn, such that future calls of the returned function will always pass
+    the given value val to fn in position pos, along with any additional arguments provided.  Written based on the
+    desire to emulate the 'if' portion of list/dict comprehension in Python, such as in the following:
+        list = [val for key,val in dict.items() if key in equip_bags]
+
     Example usage:
-    local equip_bags = map(customized(lor.fn_get, player), equip_bag_names)
+        local equip_bags = map(customized(lor.fn_get, player), equip_bag_names)
 --]]
 function customized(fn, val, pos)
     local p = pos or 1
@@ -173,11 +173,10 @@ end
 
 
 --[[
-    Interprets the given string to perform list comprehension using the given
-    content.
+    Interprets the given string to perform list/dict comprehension using the given content.
     Acceptable format: 'output_key:output_val for k,v in table if condition'
 --]]
-function comp(comp_str, locals)
+function pycomp(comp_str, locals)
     local f_start,f_end = comp_str:find(' for ')
     local outputs = comp_str:sub(1,f_start):trim()
     local _outs = outputs:psplit('[:,]')
@@ -221,7 +220,24 @@ function comp(comp_str, locals)
     for k,v in pairs(locals) do
         fenv[k] = v
     end
-    lor.G.setfenv(loaded, fenv)
+    global.setfenv(loaded, fenv)
+    return loaded()
+end
+
+
+function lambda(args, body, locals)
+    args = (args ~= nil) and args or ''
+    if body == nil then
+        local _, _, _args, _body = args:find('([^:]-):%s+(.*)')
+        args, body = _args or '', _body
+    end
+    local loaded = loadstring(('return function(%s) return (%s) end'):format(args, body))
+    local fenv = _G
+    locals = locals or {}
+    for k, v in pairs(locals) do
+        fenv[k] = v
+    end
+    setfenv(loaded, fenv)
     return loaded()
 end
 
@@ -236,7 +252,7 @@ return lor_func
 
 -----------------------------------------------------------------------------------------------------------
 --[[
-Copyright © 2016, Ragnarok.Lorand
+Copyright © 2018, Ragnarok.Lorand
 All rights reserved.
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.

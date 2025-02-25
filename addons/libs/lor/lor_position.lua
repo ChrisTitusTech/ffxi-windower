@@ -6,12 +6,14 @@
 
 local lor_position = {}
 lor_position._author = 'Ragnarok.Lorand'
-lor_position._version = '2016.10.02.0'
+lor_position._version = '2018.05.20.0'
 
 require('lor/lor_utils')
+_libs.lor.req('ffxi')
 _libs.lor.position = lor_position
 
-local quadrants = {NW={-1,1},SW={1,-1},NE={0,-1},SE={0,1}}
+local quadrants = {NW = {-1, 1}, SW = {1, -1}, NE = {0, -1}, SE = {0, 1} }
+local ffxi = _libs.lor.ffxi
 
 
 function lor_position.new(...)
@@ -28,6 +30,14 @@ function lor_position.new(...)
     self.pos.y = tempPos.y or tempPos[2] or 0
     self.pos.z = tempPos.z or tempPos[3] or 0
     return setmetatable(self, {__index = lor_position, __eq = lor_position.equals, __tostring = lor_position.toString})
+end
+
+function lor_position.of(targ)
+    local mob = ffxi.get_target(targ or 'me')
+    if (mob ~= nil) then
+        return lor_position.new(mob.x, mob.y, mob.z)
+    end
+    return nil
 end
 
 function lor_position.current_position()
@@ -67,7 +77,7 @@ local function roundPos(pos)
 end
 
 function lor_position:toString()
-    return '(%s,%s,%s)':format(roundPos(self.pos.x), roundPos(self.pos.y), roundPos(self.pos.z))
+    return ('(%s,%s,%s)'):format(roundPos(self.pos.x), roundPos(self.pos.y), roundPos(self.pos.z))
 end
 
 --[[
@@ -99,7 +109,7 @@ return lor_position
 
 -----------------------------------------------------------------------------------------------------------
 --[[
-Copyright © 2016, Ragnarok.Lorand
+Copyright © 2018, Ragnarok.Lorand
 All rights reserved.
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.

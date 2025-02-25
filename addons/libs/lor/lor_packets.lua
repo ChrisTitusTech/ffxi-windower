@@ -6,7 +6,7 @@
 
 local lor_packets = {}
 lor_packets._author = 'Ragnarok.Lorand'
-lor_packets._version = '2016.10.27.0'
+lor_packets._version = '2018.05.22.0'
 
 require('lor/lor_utils')
 _libs.lor.packets = lor_packets
@@ -36,7 +36,7 @@ local function get_bit_packed(dat_string, start, stop)
     end
     return newval
 end
-
+lor_packets.get_bit_packed = get_bit_packed
 
 --[[
     Incoming Packet ID 0x037 - Character Update

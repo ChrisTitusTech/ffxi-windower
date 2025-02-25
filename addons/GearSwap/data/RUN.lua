@@ -173,14 +173,12 @@ function init_gear_sets()
 
     -- Magic
     sets.midcast['Enhancing Magic'] = {
-        neck="Colossus's Torque",
-        --ear1="Augmenting Earring",
-        --ear2="Andoaa Earring",
-        --body="Manasa Chasuble",
+        head="Erilaz Galea +2",     -- Enhancing duration
+        neck="Colossus's Torque",   -- Enhancing skill
+        back="Merciful Cape",       -- Enhancing skill
+        waist="Siegel Sash",        -- Enhancing skill
         hands="Runeist Mitons",
-        back="Merciful Cape",
-        --waist="Olympus Sash",
-        legs="Futhark Trousers"
+        legs="Futhark Trousers",    -- Enhancing duration
     }
     
     -- Recast Timers for spells not otherwise specified
@@ -464,6 +462,17 @@ end
 
 function auto_rune()
     if midaction() or player.status ~= 'Engaged' then return end
+    
+    -- Count active runes
+    local active_runes = 0
+    for _, rune in ipairs(state.Runes) do
+        if buffactive[rune] then
+            active_runes = active_runes + 1
+        end
+    end
+    
+    -- Don't cast if we already have 3 runes
+    if active_runes >= 3 then return end
     
     if state.DefenseMode.value == 'Magical' then
         if not buffactive['Ignis'] then

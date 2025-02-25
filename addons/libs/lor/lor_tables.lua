@@ -245,12 +245,12 @@ function table.kv_strings(t)
         else
             sval = tostring(v)
         end
-        r[#r+1] = '%s: %s':format(skey, sval)
+        r[#r+1] = ('%s: %s'):format(skey, sval)
     end
     return r
 end
 
-function table.str(t) return '{%s}':format(', ':join(map(tostring, t))) end
+function table.str(t) return ('{%s}'):format((', '):join(map(tostring, t))) end
 
 
 --[[

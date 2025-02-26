@@ -1,0 +1,17 @@
+sets.exported={
+    main={ name="Queller Rod", augments={'Healing magic skill +15','"Cure" potency +10%','"Cure" spellcasting time -7%',}},
+    sub="Ames",
+    ammo="Hasty Pinion +1",
+    head="Aya. Zucchetto +2",
+    body="Ayanmo Corazza +2",
+    hands="Aya. Manopolas +2",
+    legs="Aya. Cosciales +2",
+    feet="Aya. Gambieras +2",
+    neck="Asperity Necklace",
+    waist="Windbuffet Belt",
+    left_ear="Brutal Earring",
+    right_ear="Cessance Earring",
+    left_ring="Chirich Ring",
+    right_ring="Rajas Ring",
+    back={ name="Alaunus's Cape", augments={'MND+10','Eva.+20 /Mag. Eva.+20','MND+10','Enmity-10','Damage taken-5%',}},
+}

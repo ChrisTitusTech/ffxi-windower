@@ -5,9 +5,6 @@ function get_sets()
 	include('Mote-Include.lua')
     -- Additional local binds
     include('Global-Binds.lua')
-    sets = {}  -- Initialize sets table
-    sets.precast = {}  -- Initialize precast table
-    sets.midcast = {}  -- Initialize midcast table
 end
 
 function user_setup()
@@ -27,33 +24,40 @@ function user_setup()
     set_macro_page(1, 1)
 end
 
-function file_unload()
-    -- First call the global binds_on_unload if it exists
-    if binds_on_unload then
-        binds_on_unload()
-    end
+function job_setup()
+    state.Buff['Afflatus Solace'] = buffactive['Afflatus Solace'] or false
+    state.Buff['Afflatus Misery'] = buffactive['Afflatus Misery'] or false
+    state.Buff['Sublimation: Activated'] = buffactive['Sublimation: Activated'] or false
     
-    -- Remove all our custom keybinds
+    -- Add weapon options and set based on subjob
+    state.WeaponSet = M{['description']='Weapon Set', 'Default', 'DualWield'}
+    if player.sub_job == 'NIN' or player.sub_job == 'DNC' then
+        state.WeaponSet:set('DualWield')
+    else
+        state.WeaponSet:set('Default')
+    end
+end
+
+function file_unload()
     send_command('unbind !h')
     send_command('unbind ^[')
-    
-    -- Only unload healbot if it was loaded
-    windower.send_command('lua u healbot')
+    send_command('lua u healbot')
 end
 
 function init_gear_sets()    
-    -- Add weapon sets at the start of init_gear_sets
+    -- Weapon sets
     sets.weapons = {}
     sets.weapons.Default = {
-        main="Queller Rod",
+        main={ name="Queller Rod", augments={'Healing magic skill +15','"Cure" potency +10%','"Cure" spellcasting time -7%',}},
         sub="Sors Shield",
     }
     sets.weapons.DualWield = {
-        main="Queller Rod",
-        sub="Ames", 
+        main={ name="Queller Rod", augments={'Healing magic skill +15','"Cure" potency +10%','"Cure" spellcasting time -7%',}},
+        sub="Ames",
+        left_ear="Suppanomimi",
     }
     
-    -- Engaged sets
+    -- Base engaged set that other sets will build from
     sets.engaged = {
         ammo="Hasty Pinion +1",
         head="Aya. Zucchetto +2",
@@ -70,19 +74,19 @@ function init_gear_sets()
         back={ name="Alaunus's Cape", augments={'MND+10','Eva.+20 /Mag. Eva.+20','MND+10','Enmity-10','Damage taken-5%',}},
     }
 
-    -- Idle sets (based on engaged, keeping only Refresh/Regen items)
-    sets.idle = set_combine(sets.engaged, {
+    -- Simplified idle set
+    sets.idle = set_combine(sets.engaged, sets.weapons[state.WeaponSet.value], {
         ammo="Homiliary",
         ear1="Moonshade Earring",
-        ear2="Ethereal Earring", -- Refresh
-        body="Ebers Bliaut +2", -- Refresh
+        ear2="Ethereal Earring",
+        body="Ebers Bliaut +2",
         hands="Ebers Mitts +2",
-        legs="Ebers Pant. +2",
-        ring1="Chirich Ring",
+        legs="Ebers Pant. +2"
     })
 
     sets.resting = sets.idle
-    -- FastCast
+
+    -- Simplified FastCast set
     sets.precast.FC = {
         ammo="Incantor Stone",
         head="Ebers Cap +1",
@@ -93,7 +97,7 @@ function init_gear_sets()
         hands="Ebers Mitts +2",
         ring1="Prolix Ring",
         ring2="Moonbeam Ring",
-        back="Alaunus's Cape",
+        back={ name="Alaunus's Cape", augments={'MND+10','Eva.+20 /Mag. Eva.+20','MND+10','Enmity-10','Damage taken-5%',}},
         waist="Witful Belt",
         legs="Ebers Pant. +2",
         feet="Theo. Duckbills +1"
@@ -112,48 +116,46 @@ function init_gear_sets()
         ear1="Roundel Earring",
         ear2="Orison Earring",
         body="Ebers Bliaut +2",
-        hands="Ebers Mitts +2",
+        hands="Telchine Gloves",
         ring1="Sirona's Ring",
         ring2="Ephedra Ring",
-        back="Alaunus's Cape",
+        back={ name="Alaunus's Cape", augments={'MND+10','Eva.+20 /Mag. Eva.+20','MND+10','Enmity-10','Damage taken-5%',}},
         waist="Witful Belt",
         legs="Ebers Pant. +2",
         feet="Theo. Duckbills +1"
     }
 
-    -- Cure potency with Afflatus Solace
     sets.midcast.CureSolace = set_combine(sets.midcast.Cure, {
-        body="Ebers Bliaut +2",  -- Enhances Afflatus Solace
+        body="Ebers Bliaut +2"
     })
-
-    -- Enhancing Magic
+    
     sets.midcast['Enhancing Magic'] = {
-        ammo="Hasty Pinion +1",
-        head="Aya. Zucchetto +2",
-        body="Ayanmo Corazza +2",
-        hands="Aya. Manopolas +2",
-        legs="Aya. Cosciales +2",
-        feet="Aya. Gambieras +2",
-        neck="Asperity Necklace",
-        waist="Windbuffet Belt",
-        left_ear="Brutal Earring",
-        right_ear="Cessance Earring",
-        left_ring="Chirich Ring",
-        right_ring="Rajas Ring",
-        back={ name="Alaunus's Cape", augments={'MND+10','Eva.+20 /Mag. Eva.+20','MND+10','Enmity-10','Damage taken-5%',}},
-    }
-
-    -- Regen
-    sets.midcast.Regen = set_combine(sets.midcast['Enhancing Magic'], {
-        -- head="Inyanga Tiara",
+        ammo="Staunch Tathlum",
+        head="Ebers Cap +1",
+        neck="Clr. Torque +1",
+        ear1="Roundel Earring",
+        ear2="Orison Earring",
         body="Piety Bliaut +1",
         hands="Ebers Mitts +2",
-        legs="Theo. Pant. +1",
+        ring1="Sirona's Ring",
+        ring2="Ephedra Ring",
+        back={ name="Alaunus's Cape", augments={'MND+10','Eva.+20 /Mag. Eva.+20','MND+10','Enmity-10','Damage taken-5%',}},
+        waist="Witful Belt",
+        legs="Piety Pantaloons",
+        feet="Theo. Duckbills +1"
+    }
+
+    -- Regen set
+    sets.midcast.Regen = set_combine(sets.midcast['Enhancing Magic'], {
+        body="Piety Bliaut +1",
+        hands="Ebers Mitts +2",
+        legs="Theo. Pant. +1"
     })
 
     -- Nuking set for solo play
     sets.midcast['Divine Magic'] = {
-        legs="Theo Pant. +1",
+        legs="Theo. Pant. +1",
+        hands="Fanatic Gloves"
     }
 
     -- Optional: Specific set for Holy
@@ -184,7 +186,7 @@ function midcast(spell)
                 equip(sets.midcast.Cure)
             end
         elseif spell.english:startswith('Curaga') then
-            equip(sets.midcast.Cure)  -- Using regular Cure set for Curaga
+            equip(sets.midcast.Cure)
         elseif spell.english:startswith('Regen') then
             equip(sets.midcast.Regen)
         end
@@ -196,18 +198,16 @@ function midcast(spell)
 end
 
 function aftercast(spell)
-    update_combat_weapon()
     if player.status == 'Engaged' then
-        equip(sets.engaged)
+        equip(set_combine(sets.engaged, sets.weapons[state.WeaponSet.value]))
     else
         equip(sets.idle)
     end
 end
 
 function status_change(new,old)
-    update_combat_weapon()
     if new == 'Engaged' then
-        equip(sets.engaged)
+        equip(set_combine(sets.engaged, sets.weapons[state.WeaponSet.value]))
     else
         equip(sets.idle)
     end
@@ -217,23 +217,24 @@ end
 function job_self_command(commandArgs, eventArgs)  
     if commandArgs[1] == 'hbtoggle' then
         state.HealBot:toggle()
-        if state.HealBot.value then
-            send_command('hb on')
-        else
-            send_command('hb off')
-        end
+        send_command('hb ' .. (state.HealBot.value and 'on' or 'off'))
     end
 end
 
--- Add this new function after init_gear_sets
-function update_combat_weapon()
-    -- Get the current sub job
-    local sub_job = player.sub_job
-    
-    -- Choose appropriate weapon set
-    if sub_job == 'NIN' or sub_job == 'DNC' then
-        equip(sets.weapons.DualWield)
+-- Modify the default melee set after it was constructed.
+function customize_melee_set(meleeSet)
+    -- Apply the weapon set
+    meleeSet = set_combine(meleeSet, sets.weapons[state.WeaponSet.value])
+    return meleeSet
+end
+
+-- Called when your sub job changes
+function sub_job_change(new, old)
+    -- Update weapon set based on subjob
+    if new == 'NIN' or new == 'DNC' then
+        state.WeaponSet:set('DualWield')
     else
-        equip(sets.weapons.Default)
+        state.WeaponSet:set('Default')
     end
+    equip(sets.weapons[state.WeaponSet.value])
 end

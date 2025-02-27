@@ -1,22 +1,8 @@
-_addon.name = 'HealBot'
-_addon.author = 'Lorand'
+_addon.name = 'HB'
+_addon.author = 'Lorand - Enhanced by PBW and Fendo'
 _addon.command = 'hb'
-_addon.lastUpdate = '2018.05.22.0'
+_addon.lastUpdate = '2024.03.17.0'
 _addon.version = _addon.lastUpdate
-
---[[
-TODO:
-- !!Fix: Make follow cancellable when in other zones
-- Global action queue instead of rebuilding every cycle
-- Action sets that must be performed together (e.g., Snake Eye, then Double Up)
-- GEO
-    - debuff support
-    - clean up logic/code
-- COR
-    - Rolled # detection
-- If not in same pt as other instance, send pt list via IPC
-- If in alliance, automatically watch other healers?
---]]
 
 require('luau')
 require('lor/lor_utils')
@@ -27,12 +13,31 @@ lor_settings = _libs.lor.settings
 serialua = _libs.lor.serialization
 
 hb = {
-    active = false, configs_loaded = false, partyMemberInfo = {}, ignoreList = S{}, extraWatchList = S{},
+    active = false, 
+    configs_loaded = false, 
+    partyMemberInfo = {}, 
+    ignoreList = S{}, 
+    extraWatchList = S{}, 
+    job_registry= T{},
     modes = {['showPacketInfo'] = false, ['debug'] = false, ['mob_debug'] = false, ['independent'] = false},
-    _events = {}, txts = {}, config = {}
+    _events = {}, 
+    txts = {}, 
+    config = {}, 
+    showdebuff = true, 
+    ipc_mob_debuffs = T{}, 
+    autoRecoverMPMode = false, 
+    autoRecoverHPMode = false,
+	zone_begin = false, 
+    should_attempt_to_cross_zone_line = false,
 }
 healer = T{}
 settings = {}
+settings.ws = {
+    keep_AM3 = false, 
+    AM3_name = nil, 
+    partner = nil
+}
+
 _libs.lor.debug = hb.modes.debug
 
 res = require('resources')
@@ -40,7 +45,6 @@ config = require('config')
 texts = require('texts')
 packets = require('packets')
 files = require('files')
-
 require('HealBot_statics')
 require('HealBot_utils')
 CureUtils = require('HB_CureUtils')
@@ -58,18 +62,106 @@ local pm_keys = {
     {'p0','p1','p2','p3','p4','p5'}, {'a10','a11','a12','a13','a14','a15'}, {'a20','a21','a22','a23','a24','a25'}
 }
 
+-- San d'Oria(294):        149,572 - Defense Down, Avoidance Down
+-- Bastok(295):            13,21 - Slow, Addle
+-- Windurst(296):          168 - Inhibit TP
+-- Jeuno(297):             31 - Plague
+-- Dia, Bio all zones:     134,135
+
+--dyna_aura_ids = S{572,149,13,21,168,31,134,135} -- Auras
+--gaol_aura_ids = S{146,147,148,149,167,404,174,175,136,137,138,139,140,141,142} -- "DOWN" Aura + Stat down
+--gaes_fete_debuff_ids = S{29,557,558,559,560,561,562,563,564} -- Auras [Mute + 8 Down]
+dyna_sandoria_aura = {'defense down','dia','bio'}    -- 'avoidance down', NOT CODED
+dyna_bastok_aura = {'slow','addle','dia','bio'}
+dyna_windurst_aura = {'inhibit tp','dia','bio'}
+dyna_jeuno_aura = {'plague','dia','bio'}
+dyna_auras = {'defense down','slow','addle','inhibit tp','plague','dia','bio'}    -- 'avoidance down', NOT CODED
+dyna_zones = S{294,295,296,297}
+
+gaol_zones = S{279,298}
+gaol_auras = {'accuracy down','attack down','defense down','evasion down','magic def. down','magic atk. down','magic evasion down','magic acc. down','str down','int down','vit down','chr down','mnd down','dex down','agi down'}
+
+shinryu_debuffs = {'str down','int down','vit down','chr down','mnd down','dex down','agi down'}
+shinryu_zone = 255
+
+local LevelRestrict = false
+
+__bags = {}
+local getBagType = function(access, equippable)
+    return S(res.bags):filter(function(key) return (key.access == access and key.en ~= 'Recycle' and (not key.equippable or key.equippable == equippable)) or key.id == 0 and key end)
+end
+
+do -- Setup Bags.
+    __bags.usable = T(getBagType('Everywhere', false))
+end
+
 
 hb._events['load'] = windower.register_event('load', function()
     if not _libs.lor then
-        local err_msg = 'HealBot ERROR: Missing core requirement: https://github.com/lorand-ffxi/lor_libs'
+        local err_msg = 'HB ERROR: Missing core requirement: https://github.com/zpaav/lor_libs/'
         windower.add_to_chat(39, err_msg)
         error(err_msg)
     end
+	
     atcc(262, 'Welcome to HealBot! To see a list of commands, type //hb help')
 
     _G["healer"] = _libs.lor.actor.Actor.new()
+	zone_info = windower.ffxi.get_info()
     utils.load_configs()
     CureUtils.init_cure_potencies()
+
+
+    local zone_info = windower.ffxi.get_info()
+    if gaol_zones:contains(zone_info.zone) then
+        coroutine.sleep(10)
+        local current_buffs = windower.ffxi.get_player()["buffs"]
+        local SJRestrict = false
+
+        for key,val in pairs(current_buffs) do
+            if val == 157 then -- SJ Restriction
+                SJRestrict = true
+            end
+        end
+
+        if SJRestrict == true then
+            windower.add_to_chat(122,'Loaded HB in Sheol: Gaol, disabling HB debuff removal on auras.')
+            for i, debuff_name in ipairs(gaol_auras) do
+                windower.send_command('hb ignore_debuff all ' .. debuff_name)
+            end
+        end
+    elseif zone_info.zone == 294 then -- San d'Oria
+        coroutine.sleep(5)
+        windower.add_to_chat(122,'Loaded HB in Dynamis Divergence - San d\'Oria, disabling HB debuff removal on auras.')
+        for i, debuff_name in ipairs(dyna_sandoria_aura) do
+            windower.send_command('hb ignore_debuff all ' .. debuff_name)
+        end
+    elseif zone_info.zone == 295 then -- Bastok
+        coroutine.sleep(5)
+        windower.add_to_chat(122,'Loaded HB in Dynamis Divergence - Bastok, disabling HB debuff removal on auras.')
+        for i, debuff_name in ipairs(dyna_bastok_aura) do
+            windower.send_command('hb ignore_debuff all ' .. debuff_name)
+        end
+    elseif zone_info.zone == 296 then -- Windurst
+        coroutine.sleep(5)
+        windower.add_to_chat(122,'Loaded HB in Dynamis Divergence - Windurst, disabling HB debuff removal on auras.')
+        for i, debuff_name in ipairs(dyna_windurst_aura) do
+            windower.send_command('hb ignore_debuff all ' .. debuff_name)
+        end
+    elseif zone_info.zone == 297 then -- Jeuno
+        coroutine.sleep(5)
+        windower.add_to_chat(122,'Loaded HB in Dynamis Divergence - Jeuno, disabling HB debuff removal on auras.')
+        for i, debuff_name in ipairs(dyna_jeuno_aura) do
+            windower.send_command('hb ignore_debuff all ' .. debuff_name)
+        end
+    elseif zone_info.zone == 255 then -- Abyssea - Empyreal Paradox
+        coroutine.sleep(5)
+        windower.add_to_chat(122,'Loaded HB in Abyssea - Empyreal Paradox, disabling HB debuff on stat down.')
+        for i, debuff_name in ipairs(shinryu_debuffs) do
+            windower.send_command('hb ignore_debuff all ' .. debuff_name)
+        end
+    end
+
+
 end)
 
 
@@ -84,19 +176,93 @@ hb._events['logout'] = windower.register_event('logout', function()
     windower.send_command('lua unload healBot')
 end)
 
-
 hb._events['zone'] = windower.register_event('zone change', function(new_id, old_id)
+	hb.should_attempt_to_cross_zone_line = false
+	hb.zone_begin = false
     healer.zone_enter = os.clock()
     local zone_info = windower.ffxi.get_info()
+    buffs.resetDebuffTimers('ALL')
+	hb.active = false	-- Deactivate when zoned.
+    zone_info = windower.ffxi.get_info()
+	offense.cleanup()
+	
     if zone_info ~= nil then
         if zone_info.zone == 131 then
             windower.send_command('lua unload healBot')
+        elseif gaol_zones:contains(zone_info.zone) then
+            coroutine.sleep(10)
+            local current_buffs = windower.ffxi.get_player()["buffs"]
+            local SJRestrict = false
+
+            for key,val in pairs(current_buffs) do
+                if val == 157 then -- SJ Restriction
+                    SJRestrict = true
+                end
+            end
+
+            if SJRestrict == true then
+                windower.add_to_chat(122,'In Sheol: Gaol, disabling HB debuff removal on auras.')
+                for i, debuff_name in ipairs(gaol_auras) do
+                    windower.send_command('hb ignore_debuff all ' .. debuff_name)
+                end
+            end
+        elseif zone_info.zone == 294 then -- San d'Oria
+            coroutine.sleep(5)
+            windower.add_to_chat(122,'In Dynamis Divergence - San d\'Oria, disabling HB debuff removal on auras.')
+            for i, debuff_name in ipairs(dyna_sandoria_aura) do
+                windower.send_command('hb ignore_debuff all ' .. debuff_name)
+            end
+        elseif zone_info.zone == 295 then -- Bastok
+            coroutine.sleep(5)
+            windower.add_to_chat(122,'In Dynamis Divergence - Bastok, disabling HB debuff removal on auras.')
+            for i, debuff_name in ipairs(dyna_bastok_aura) do
+                windower.send_command('hb ignore_debuff all ' .. debuff_name)
+            end
+        elseif zone_info.zone == 296 then -- Windurst
+            coroutine.sleep(5)
+            windower.add_to_chat(122,'In Dynamis Divergence - Windurst, disabling HB debuff removal on auras.')
+            for i, debuff_name in ipairs(dyna_windurst_aura) do
+                windower.send_command('hb ignore_debuff all ' .. debuff_name)
+            end
+        elseif zone_info.zone == 297 then -- Jeuno
+            coroutine.sleep(5)
+            windower.add_to_chat(122,'In Dynamis Divergence - Jeuno, disabling HB debuff removal on auras.')
+            for i, debuff_name in ipairs(dyna_jeuno_aura) do
+                windower.send_command('hb ignore_debuff all ' .. debuff_name)
+            end
+        elseif zone_info.zone == 255 then -- Abyssea - Empyreal Paradox
+            coroutine.sleep(5)
+            windower.add_to_chat(122,'In Abyssea - Empyreal Paradox, disabling HB debuff on stat down.')
+            for i, debuff_name in ipairs(shinryu_debuffs) do
+                windower.send_command('hb ignore_debuff all ' .. debuff_name)
+            end
         elseif zone_info.mog_house == true then
             hb.active = false
         elseif settings.deactivateIndoors and indoor_zones:contains(zone_info.zone) then
             hb.active = false
         elseif settings.activateOutdoors and not indoor_zones:contains(zone_info.zone) then
             hb.active = true
+        end
+    end
+
+    -- Exiting code
+    if gaol_zones:contains(old_id) and not gaol_zones:contains(new_id) then
+        coroutine.sleep(5)
+        windower.add_to_chat(122,'Exiting Sheol: Gaol zones, enabling NA/Erase removal.')
+        for i, debuff_name in ipairs(gaol_auras) do
+            windower.send_command('hb unignore_debuff all ' .. debuff_name)
+        end
+    elseif dyna_zones:contains(old_id) and not dyna_zones:contains(new_id) then
+        coroutine.sleep(5)
+        windower.add_to_chat(122,'Exiting any Dynamis Divergence zone, enabling NA/Erase removal.')
+        for i, debuff_name in ipairs(dyna_auras) do
+            windower.send_command('hb unignore_debuff all ' .. debuff_name)
+        end
+    elseif old_id == shinryu_zone and new_id ~= shinryu_zone then
+        coroutine.sleep(5)
+        windower.add_to_chat(122,'Exiting Abyssea - Empyreal Paradox, enabling NA/Erase removal.')
+        for i, debuff_name in ipairs(shinryu_debuffs) do
+            windower.send_command('hb unignore_debuff all ' .. debuff_name)
         end
     end
 end)
@@ -108,7 +274,9 @@ hb._events['job'] = windower.register_event('job change', function()
     printStatus()
 end)
 
+hb._events['dis'] = windower.register_event('action', handle_dispel_action)
 hb._events['inc'] = windower.register_event('incoming chunk', handle_incoming_chunk)
+hb._events['out'] = windower.register_event('outgoing chunk', handle_outgoing_chunk)
 hb._events['cmd'] = windower.register_event('addon command', processCommand)
 
 
@@ -116,8 +284,10 @@ hb._events['cmd'] = windower.register_event('addon command', processCommand)
     Executes before each frame is rendered for display.
     Acts as the run() method of a threaded application.
 --]]
+local last_render = 0
 hb._events['render'] = windower.register_event('prerender', function()
     if not hb.configs_loaded then return end
+
     local now = os.clock()
     local moving = hb.isMoving()
     local acting = hb.isPerformingAction(moving)
@@ -130,17 +300,66 @@ hb._events['render'] = windower.register_event('prerender', function()
         if hb.auto_movement_active() then
             if ((now - healer.last_move_check) > follow.delay) then
                 local should_move = false
-                if (targ ~= nil) and (player.target_index == partner.target_index) then
-                    if offense.assist.engage and (partner.status == 1) then
-                        if healer:dist_from(targ.id) > 3 then
+				if (targ ~= nil) and (player.target_index == partner.target_index) then
+					if offense.assist.engage and (partner.status == 1) then
+						if offense.assist.noapproach == false then
+                            if healer:dist_from(targ.id) > (offense.mobdistance + targ.model_size) then
+                                if (not player.target_locked) then
+                                    healer:send_cmd('input /lockon')
+                                end
+                                should_move = true
+                                healer:move_towards(targ.id)
+                            -- elseif healer:dist_from(targ.id) < (offense.mobdistance + targ.model_size) then
+                            --     if player.target_locked then
+                            --         healer:send_cmd('input /lockon')
+                            --     end
+                            --     should_move = true
+                            --     healer:move_away(targ.id)
+                            end
+                        elseif offense.assist.noapproach == true then 
+                            -- if player.target_locked then
+                            --     healer:send_cmd('input /lockon')
+                            -- end
+                            should_move = false
+						end
+					end
+				end
+                if offense.forcemobdist == true then
+                    local mob = windower.ffxi.get_mob_by_target("t")
+                    if (not mob) then
+                        return
+                    end
+                    if (mob ~= nil and player.status == 1) then 
+                        if (healer:dist_from(mob.id) > (offense.mobdistancemax + mob.model_size)) then
+                            if not player.target_locked and not (offense.assist.nolock) then
+                                healer:send_cmd('input /lockon')
+                            end
                             should_move = true
-                            healer:move_towards(targ.id)
+                            healer:move_towards(mob.id)
+                        elseif healer:dist_from(mob.id) < (offense.mobdistancemin + mob.model_size) then
+                            if player.target_locked then
+                                healer:send_cmd('input /lockon')
+                            end
+                            should_move = true
+                            healer:move_away(mob.id)
+                        else
+                            should_move = false
                         end
                     end
                 end
-                if (not should_move) and follow.active and (healer:dist_from(follow.target) > follow.distance) then
+				-- Only follow if not engaged.
+                if ((not should_move) and follow.active and (healer:dist_from(follow.target) > follow.distance) and not (player.status == 1)) or ((not should_move) and follow.active and hb.should_attempt_to_cross_zone_line) then
                     should_move = true
                     healer:move_towards(follow.target)
+				-- For when autotarget to engage correct distance
+				elseif player.status == 1 and player.target_index and (offense.forcemobdist == false and offense.assist.noapproach == false)  then
+					local current_targ = windower.ffxi.get_mob_by_index(player.target_index)
+					if healer:dist_from(current_targ.id) > (offense.mobdistance + current_targ.model_size) then
+						should_move = true
+						healer:move_towards(current_targ.id)
+					else
+						should_move = false
+					end
                 end
                 if (not should_move) then
                     if follow.active then
@@ -152,12 +371,25 @@ hb._events['render'] = windower.register_event('prerender', function()
                 healer.last_move_check = now      --Refresh stored movement check time
             end
         end
+		
+		if hb.active and offense.assist.engage and partner and targ ~= nil and (player.target_index == partner.target_index) and (partner.status == 1) and not (player.status == 1) then
+			healer:send_cmd('input /attack on')
+		end
         
+        if hb.active and offense.assist.engage and partner and targ ~= nil and (player.target_index == partner.target_index) and (not partner.status == 1) and (player.status == 1) then
+			healer:send_cmd('input /attack off')
+		end
+		
+		if hb.active and offense.assist.engage and partner and (partner.status == 1) and not (player.status == 1) and not (offense.assist.nolock) then
+			healer:send_cmd('input /as '..offense.assist.name)
+		end
+		
         if hb.active and not (moving or acting) then
             --hb.active = false    --Quick stop when debugging
             if healer:action_delay_passed() then
-                healer.last_action = now                    --Refresh stored action check time
-                actions.take_action(player, partner, targ)
+                if actions.take_action(player, partner, targ) then
+                    healer.last_action = now                    --Refresh stored action check time
+                end
             end
         end
         
@@ -165,8 +397,33 @@ hb._events['render'] = windower.register_event('prerender', function()
             windower.send_ipc_message(ipc_req)
             healer.last_ipc_sent = now
         end
+		if (os.clock()-last_render) > 0.3 then
+			if hb.showdebuff and not indoor_zones:contains(zone_info.zone) then
+				utils.debuffs_disp()
+			end
+			utils.toggle_disp()
+			utils.check_debuffs_timer()
+			last_render = os.clock()
+		end
     end
 end)
+
+
+function haveBuff(...)
+    local args = S{...}:map(string.lower)
+    local player = windower.ffxi.get_player()
+    if (player ~= nil) and (player.buffs ~= nil) then
+        for _,bid in pairs(player.buffs) do
+            local buff = res.buffs[bid]
+            if args:contains(buff.en:lower()) then
+                return true
+            end
+        end
+    end
+	
+    return false
+end
+
 
 
 function hb.activate()
@@ -180,8 +437,13 @@ function hb.activate()
             if settings.healing.max.waltz > 0 then
                 settings.healing.mode = 'waltz'
                 settings.healing.modega = 'waltzga'
+			elseif settings.healing.max.blue > 0 then
+				settings.healing.mode = 'blue'
+                settings.healing.modega = 'bluega'
             else
                 disableCommand('cure', true)
+				disableCommand('curaga', true)
+				-- disableCommand('na', true)
             end
         else
             settings.healing.mode = 'cure'
@@ -209,6 +471,7 @@ function hb.addPlayer(list, player)
 end
 
 
+watchall = false
 local function _getMonitoredPlayers()
     local pt = windower.ffxi.get_party()
     local my_zone = pt.p0.zone
@@ -217,7 +480,7 @@ local function _getMonitoredPlayers()
         for m = 1, pt[pt_keys[p]] do
             local pt_member = pt[pm_keys[p][m]]
             if my_zone == pt_member.zone then
-                if p == 1 or hb.extraWatchList:contains(pt_member.name) then
+                if p == 1 or hb.extraWatchList:contains(pt_member.name) or watchall then
                     hb.addPlayer(targets, pt_member)
                 end
             end
@@ -226,7 +489,15 @@ local function _getMonitoredPlayers()
     for extraName,_ in pairs(hb.extraWatchList) do
         hb.addPlayer(targets, windower.ffxi.get_mob_by_name(extraName))
     end
-    hb.txts.montoredBox:text(getPrintable(targets, true))
+
+	local display_targets = S{}
+	for k,v in pairs(targets) do
+		if v.mob ~= nil then
+			display_targets:add(string.format("%-10s - %3s", v.name, get_registry(v.mob.id)))
+		end
+	end
+	
+    hb.txts.montoredBox:text(getPrintable(display_targets, true))
     hb.txts.montoredBox:visible(settings.textBoxes.montoredBox.visible)
     return targets
 end
@@ -279,7 +550,7 @@ end
 
 function hb.isPerformingAction(moving)
     local acting = healer:is_acting()
-    local status = ('is %s'):format(acting and 'performing an action' or (moving and 'moving' or 'idle'))
+	local status = ('are %s'):format(acting and 'performing an action' or (moving and 'moving' or 'idle'))
     
     if (os.clock() - healer.zone_enter) < 25 then
         acting = true
@@ -288,9 +559,9 @@ function hb.isPerformingAction(moving)
     elseif healer.zone_wait then
         healer.zone_wait = false
         buffs.resetBuffTimers('ALL', S{'Protect V', 'Shell V'})
-    elseif healer:buff_active('Sleep','Petrification','Charm','Terror','Lullaby','Stun','Silence','Mute') then
+    elseif healer:buff_active('Sleep','Petrification','Charm','Terror','Lullaby','Stun','Silence','Mute') then 
         acting = true
-        status = 'is disabled'
+		status = 'are disabled'
     end
     
     local player = windower.ffxi.get_player()
@@ -300,13 +571,14 @@ function hb.isPerformingAction(moving)
             status = status..' | \\cs(255,0,0)LOW MP\\cr'
         end
     end
-    
+	
+	healer.name = "You"
+	
     local hb_status = hb.active and '\\cs(0,0,255)[ON]\\cr' or '\\cs(255,0,0)[OFF]\\cr'
     hb.txts.actionInfo:text((' %s %s %s'):format(hb_status, healer.name, status))
     hb.txts.actionInfo:visible(settings.textBoxes.actionInfo.visible)
     return acting
 end
-
 
 function hb.process_ipc(msg)
     local loaded = serialua.decode(msg)
@@ -320,10 +592,12 @@ function hb.process_ipc(msg)
                 local player = windower.ffxi.get_player()
                 local response = {
                     method='POST', pk='buff_ids', val=player.buffs,
-                    pid=player.id, name=player.name, stype=player.spawn_type
+                    pid=player.id, name=player.name, stype=player.spawn_type, 
+					aura_table=buffs.auras, mob_loss_debuff_table=hb.ipc_mob_debuffs,
                 }
                 local encoded = serialua.encode(response)
                 windower.send_ipc_message(encoded)
+				hb.ipc_mob_debuffs = T{}
             else
                 atcfs(123, 'Invalid pk for GET request: %s', loaded.pk)
             end
@@ -336,10 +610,37 @@ function hb.process_ipc(msg)
                 if loaded.name ~= nil then                
                     local player = windower.ffxi.get_mob_by_name(loaded.name)
                     player = player or {id=loaded.pid,name=loaded.name,spawn_type=loaded.stype}
+					if loaded.aura_table then
+						for player_name,list in pairs(loaded.aura_table) do
+							if type(list) == 'table' then
+								for id, status in pairs(list) do
+									buffs.register_debuff_aura_status(player_name, tonumber(id), status.aura_status)
+								end
+							else
+								buffs.remove_debuff_aura(player_name,tonumber(id)) -- maybe not necessary?
+							end
+						end
+					end
                     buffs.review_active_buffs(player, loaded.val)
+					if loaded.mob_loss_debuff_table then
+						if next(loaded.mob_loss_debuff_table) ~= nil then
+							for tid, debuff in pairs(loaded.mob_loss_debuff_table) do
+								for _,v in pairs(debuff) do
+									buffs.register_debuff(v.targ, v.db, false)
+                                    coroutine.sleep(0.25)
+								end
+							end
+						end
+					end
                 else
                     atcfs(123, 'Missing name in POST message: %s', msg)
                 end
+			elseif loaded.pk == 'follow_ids' then	-- For follow to zoneline
+				log('IPC: for follow only received.')
+				if settings.follow.target and settings.follow.target == loaded.follow_name and settings.follow.active and loaded.orig_zone == windower.ffxi.get_info().zone then
+					log('IPC: To set follow run to zone flag.')
+					hb.should_attempt_to_cross_zone_line = true
+				end			
             else
                 atcfs(123, 'Invalid pk for POST message: %s', loaded.pk)
             end
@@ -352,7 +653,6 @@ function hb.process_ipc(msg)
 end
 
 hb._events['ipc'] = windower.register_event('ipc message', hb.process_ipc)
-
 
 --======================================================================================================================
 --[[

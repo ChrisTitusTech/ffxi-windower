@@ -89,17 +89,15 @@ function init_gear_sets()
     -- Simplified FastCast set
     sets.precast.FC = {
         ammo="Incantor Stone",
-        head="Ebers Cap +1",
         neck="Clr. Torque +1",
         ear1="Loquac. Earring",
         ear2="Orison Earring",
-        body="Piety Bliaut +1",
-        hands="Ebers Mitts +2",
+        hands="Gende. Gages +1",
         ring1="Prolix Ring",
         ring2="Moonbeam Ring",
-        back={ name="Alaunus's Cape", augments={'MND+10','Eva.+20 /Mag. Eva.+20','MND+10','Enmity-10','Damage taken-5%',}},
+        back="Swith Cape",
         waist="Witful Belt",
-        legs="Ebers Pant. +2",
+        legs="Aya. Cosciales +2",
         feet="Theo. Duckbills +1"
     }
 

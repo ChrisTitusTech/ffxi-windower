@@ -5,7 +5,7 @@
 --]]
 --==============================================================================
 
-local cu = {cure_types={'cure','waltz','curaga','waltzga'} }
+local cu = {cure_types={'cure','waltz','curaga','waltzga','blue','bluega'} }
 local Pos = _libs.lor.position
 local ffxi = _libs.lor.ffxi
 
@@ -38,9 +38,19 @@ cu.waltzga = {
     [1] = {id=195,  en='Divine Waltz',      res=res.job_abilities[195]},
     [2] = {id=262,  en='Divine Waltz II',   res=res.job_abilities[262]}
 }
+cu.blue = {
+	[1] = {id=578, 	en='Wild Carrot',		res=res.spells[578]},
+    [2] = {id=593, 	en='Magic Fruit',		res=res.spells[593]},
+	[3] = {id=658, 	en='Plenilune Embrace',	res=res.spells[658]},
+	[4] = {id=541, 	en='Blood Saber',		res=res.spells[541]},	-- For disabling BLU Cure and only BLU Aoe
+}
+cu.bluega = {
+	[1] = {id=581, 	en='Healing Breeze',	res=res.spells[581]},
+    [2] = {id=690, 	en='White Wind',		res=res.spells[690]},
+}
 
 function cu.init_cure_potencies()
-    local potency_table = hb.config.cure_potency[healer.name] and hb.config.cure_potency[healer.name][healer.main_job] or hb.config.cure_potency.default
+	local potency_table = (hb.config.cure_potency[healer.name] and hb.config.cure_potency[healer.name][healer.main_job]) or hb.config.cure_potency[healer.main_job] or hb.config.cure_potency.default
     for spell_group,_ in pairs(potency_table) do
         for spell_tier,_ in pairs(cu[spell_group]) do
             cu[spell_group][spell_tier].hp = potency_table[spell_group][spell_tier]
@@ -131,10 +141,10 @@ function cu.pick_best_curaga_possibility()
             distances[memberA] = LT()
             for memberB, b in pairs(members) do
                 if b then
-                    if memberA ~= memberB then
-                        local dist = a.pos:getDistance(b.pos)
+					if memberA ~= memberB then
+                        local dist = a.pos and a.pos:getDistance(b.pos)
                         distances[memberA]:insert(dist)
-                        if dist < 10 then
+                        if dist and dist < 10 then
                             coverage[memberA]:insert(memberB)
                         end
                     end
@@ -172,7 +182,12 @@ function cu.pick_best_curaga_possibility()
     end
     min_hpp = min_hpp * 0.7 --add extra weight
     local target = {name=best_target, missing=w_missing, hpp=min_hpp}
-    return cu.get_usable_cure(tier, settings.healing.modega), target
+	if settings.healing.modega == 'bluega' then
+		target = {name=windower.ffxi.get_player().name, missing=w_missing, hpp=min_hpp}
+		return cu.get_usable_cure(tier, settings.healing.modega), target
+	else
+		return cu.get_usable_cure(tier, settings.healing.modega), target
+	end
 end
 
 
@@ -262,13 +277,21 @@ function cu.get_usable_cure(orig_tier, cure_type)
         recasts = windower.ffxi.get_spell_recasts()
     end
     
-    local tier = orig_tier
-    while tier > 1 do
+	local tier = orig_tier
+	local check_action = cu[cure_type][tier].res
+    while (check_action.type == "BlueMagic" and tier >= 1) or tier > 1 do
         local action = cu[cure_type][tier].res
         local rctime = recasts[action.recast_id] or 0               --Cooldown remaining for current tier
         local mod_cost = action[_p..'_cost'] * mult                 --Modified cost of current tier in MP/TP
         if (mod_cost <= player.vitals[_p]) and (rctime == 0) then   --Sufficient MP/TP and cooldown is ready
-            return action
+			if action.type == "BlueMagic" then
+				if (player.main_job_id == 16 and table.contains(windower.ffxi.get_mjob_data().spells,action.id))
+				or (player.sub_job_id == 16 and table.contains(windower.ffxi.get_sjob_data().spells,action.id)) then
+					return action
+				end
+			else
+				return action
+			end
         end
         tier = tier - 1
     end

@@ -7,13 +7,31 @@
 
 local offense = {
     immunities=lor_settings.load('data/mob_immunities.lua'),
-    assist={active = false, engage = false},
-    debuffs={}, ignored={}, mobs={}, dispel={},
-    debuffing_active = true
+    alwaysfacetarget = true,
+    mobdistance = 2.2, -- Default Mob Distance without forcing distances.
+    mobdistancemin = 2.2,-- 2.2, -- Forcing distance min
+    mobdistancemax = 20.2, -- 24,  -- Forcing distance max
+    forcemobdist = false,
+    assist={active = false, engage = false, nolock = false, noapproach = false, sametarget = true,},
+	moblist={active = false, mobs=S{}, debuffs={},},
+    debuffs={}, ignored={}, mobs={}, 
+	dispel={active = true, mobs={}, ignored=S{},},
+    debuffing_active = true,
+	debuffing_battle_target = false,
+	stymie={active = false, spell = '', last_used = 0, flag = false, attempt = 0},
 }
 
 
-function offense.register_assistee(assistee_name)
+function offense.register_assistee(assistee_name, job_name_flag)
+	if job_name_flag then
+		if utils.getPlayerNameFromJob(assistee_name) then
+			offense.register_assistee(utils.getPlayerNameFromJob(assistee_name), false)
+		else
+			atc('Unable to find JOB target: '..assistee_name:upper())
+		end
+		return
+	end
+
     local pname = utils.getPlayerName(assistee_name)
     if (pname ~= nil) then
         offense.assist.name = pname
@@ -49,10 +67,13 @@ function offense.cleanup()
             end
         end
     end
+	if offense.dispel.mobs then
+		offense.dispel.mobs = {}
+	end
 end
 
 
-function offense.maintain_debuff(spell, cancel)
+function offense.maintain_debuff(spell, cancel, mob_debuff_list_flag)
     local nspell = utils.normalize_action(spell, 'spells')
     if not nspell then
         atcfs(123, '[offense.maintain_debuff] Invalid spell: %s', spell)
@@ -65,12 +86,24 @@ function offense.maintain_debuff(spell, cancel)
     end
     local debuff = res.buffs[debuff_id]
     if cancel then
-        offense.debuffs[debuff.id] = nil
+		if mob_debuff_list_flag then
+			offense.moblist.debuffs[debuff.id] = nil
+		else
+			offense.debuffs[debuff.id] = nil
+		end
     else
-        offense.debuffs[debuff.id] = {spell = nspell, res = debuff}
+		if mob_debuff_list_flag then
+			offense.moblist.debuffs[debuff.id] = {spell = nspell, res = debuff}
+		else
+			offense.debuffs[debuff.id] = {spell = nspell, res = debuff}
+		end
     end
     local msg = cancel and 'no longer ' or ''
-    atcf('Will %smaintain debuff on mobs: %s', msg, nspell.en)
+	if mob_debuff_list_flag then
+		atcf('Will %smaintain debuff on moblist: %s', msg, nspell.en)
+	else
+		atcf('Will %smaintain debuff on mobs: %s', msg, nspell.en)
+	end
 end
 
 
@@ -109,17 +142,48 @@ function offense.registerMob(mob, forget)
 end
 
 
-function offense.getDebuffQueue(player, target)
+function offense.getDebuffQueue(player, target, mob_debuff_list_flag)
     local dbq = ActionQueue.new()
     if offense.debuffing_active then
-        offense.mobs[target.id] = offense.mobs[target.id] or {}
-        for id,debuff in pairs(offense.debuffs) do
-            if offense.mobs[target.id][id] == nil then
-                if not (offense.immunities[target.name] and offense.immunities[target.name][id]) then
-                    dbq:enqueue('debuff_mob', debuff.spell, target.name, debuff.res, (' (%s)'):format(debuff.spell.en))
-                end
-            end
-        end
+		offense.mobs[target.id] = offense.mobs[target.id] or {}
+		if mob_debuff_list_flag and next(offense.moblist.debuffs) then -- Use alternative debuff list for moblist
+			for id,debuff in pairs(offense.moblist.debuffs) do
+				if offense.mobs[target.id][id] == nil then
+					if not (offense.immunities[target.name] and offense.immunities[target.name][id]) then
+						dbq:enqueue('debuff_mob', debuff.spell, target.name, debuff.res, (' (%s)'):format(debuff.spell.en))
+					end
+				end
+			end
+		else
+			for id,debuff in pairs(offense.debuffs) do
+				if offense.mobs[target.id][id] == nil then
+					if not (offense.immunities[target.name] and offense.immunities[target.name][id]) then
+						dbq:enqueue('debuff_mob', debuff.spell, target.name, debuff.res, (' (%s)'):format(debuff.spell.en))
+					end
+				end
+			end
+		end
+    end
+    return dbq:getQueue()
+end
+
+
+function offense.getDispelQueue(player, target)
+    local dbq = ActionQueue.new()
+    if offense.dispel.active and (S{'RDM','BRD'}:contains(player.main_job) or S{'RDM'}:contains(player.sub_job)) then
+		if offense.dispel.mobs[target.id] then
+			for debuff,_ in pairs(offense.dispel.mobs[target.id]) do
+				if debuff ~= nil then
+					if not offense.dispel.ignored:contains(target.name) then
+						if player.main_job == 'BRD' and healer:can_use(res.spells[462]) then
+							dbq:enqueue('spells', res.spells[462], target.name, res.spells[462], ' Magic Finale')
+						elseif (player.main_job == 'RDM' or player.sub_job == 'RDM') and not (player.main_job == 'BRD') and healer:can_use(res.spells[260]) then
+							dbq:enqueue('spells', res.spells[260], target.name, res.spells[260], ' Dispel')
+						end
+					end
+				end
+			end
+		end
     end
     return dbq:getQueue()
 end

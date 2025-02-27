@@ -107,12 +107,12 @@ return {
         ['whm'] = 4
     },
     ['players'] = {
-        ['Lorand'] = 1
+        --['Lorand'] = 1
     },
     ['status_removal'] = {
         ['addle'] = 2,
         ['attack_down'] = 3,
-        ['bind'] = 4,
+        ['bind'] = 2,
         ['bio'] = 3,
         ['blind'] = 4,
         ['curse'] = 2,
@@ -125,6 +125,10 @@ return {
         ['poison'] = 4,
         ['silence'] = 1,
         ['slow'] = 1,
-        ['weight'] = 4
-    }
+        ['weight'] = 4,
+        ['sleep'] = 1
+    },
+    ['status_removal_id'] = {
+		[20] = 0,
+	},
 }
